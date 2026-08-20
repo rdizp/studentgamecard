@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Activate Student Game Card</title>
+
+
+  <!-- ========================================
+       FONTS
+  ========================================= -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    /* ========================================
+       DESIGN TOKENS
+    ========================================= */
+
+    :root {
+
+      --navy:
+        #1E3A5F;
+
+      --yellow:
+        #F4B400;
+
+      --off-white:
+        #F8F9FA;
+
+      --gray:
+        #D9D9D9;
+
+      --text:
+        #1E3A5F;
+
+      --muted:
+        #687586;
+
+      --white:
+        #FFFFFF;
+
+      --success-bg:
+        #EEF8F1;
+
+      --success-text:
+        #23723D;
+
+      --error-bg:
+        #FFF1F1;
+
+      --error-text:
+        #A52C2C;
+
+    }
+
+
+    /* ========================================
+       RESET
+    ======================================== */
+
+    * {
+
+      box-sizing:
+        border-box;
+
+    }
+
+
+    html {
+
+      min-height:
+        100%;
+
+    }
+
+
+    body {
+
+      margin:
+        0;
+
+      min-height:
+        100vh;
+
+      padding:
+        24px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      background:
+        var(--off-white);
+
+      color:
+        var(--text);
+
+      font-family:
+        'Inter',
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      position:
+        relative;
+
+      overflow-x:
+        hidden;
+
+    }
+
+
+    /* ========================================
+       BACKGROUND DECORATION
+    ========================================= */
+
+    body::before {
+
+      content:
+        '';
+
+      position:
+        fixed;
+
+      width:
+        220px;
+
+      height:
+        220px;
+
+      border-radius:
+        50%;
+
+      background:
+        rgba(244,180,0,0.12);
+
+      top:
+        -100px;
+
+      right:
+        -80px;
+
+      pointer-events:
+        none;
+
+    }
+
+
+    body::after {
+
+      content:
+        '';
+
+      position:
+        fixed;
+
+      width:
+        160px;
+
+      height:
+        160px;
+
+      border-radius:
+        32px;
+
+      background:
+        rgba(30,58,95,0.06);
+
+      bottom:
+        -70px;
+
+      left:
+        -60px;
+
+      transform:
+        rotate(-18deg);
+
+      pointer-events:
+        none;
+
+    }
+
+
+    /* ========================================
+       MAIN CARD
+    ========================================= */
+
+    .container {
+
+      width:
+        100%;
+
+      max-width:
+        460px;
+
+      background:
+        var(--white);
+
+      border:
+        2px solid var(--navy);
+
+      border-radius:
+        24px;
+
+      padding:
+        0;
+
+      box-shadow:
+        7px 7px 0 var(--yellow);
+
+      position:
+        relative;
+
+      z-index:
+        1;
+
+      overflow:
+        hidden;
+
+    }
+
+
+    /* ========================================
+       TOP BRAND BAR
+    ========================================= */
+
+    .top-bar {
+
+      background:
+        var(--navy);
+
+      padding:
+        18px 22px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        12px;
+
+    }
+
+
+    .brand-label {
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+      font-size:
+        12px;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        1.4px;
+
+      color:
+        var(--white);
+
+    }
+
+
+    .card-badge {
+
+      display:
+        inline-flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      min-width:
+        34px;
+
+      height:
+        34px;
+
+      padding:
+        0 9px;
+
+      border-radius:
+        10px;
+
+      background:
+        var(--yellow);
+
+      color:
+        var(--navy);
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+      font-size:
+        12px;
+
+      font-weight:
+        800;
+
+      transform:
+        rotate(3deg);
+
+    }
+
+
+    /* ========================================
+       CONTENT
+    ========================================= */
+
+    .content {
+
+      padding:
+        28px 24px 24px;
+
+    }
+
+
+    /* ========================================
+       HEADER
+    ========================================= */
+
+    .header {
+
+      margin-bottom:
+        26px;
+
+    }
+
+
+    .eyebrow {
+
+      display:
+        inline-block;
+
+      margin-bottom:
+        8px;
+
+      padding:
+        5px 10px;
+
+      border-radius:
+        7px;
+
+      background:
+        rgba(244,180,0,0.18);
+
+      color:
+        var(--navy);
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+      font-size:
+        11px;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        0.8px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    h1 {
+
+      margin:
+        0 0 8px;
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+      font-size:
+        clamp(26px, 7vw, 32px);
+
+      line-height:
+        1.12;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        -0.8px;
+
+      color:
+        var(--navy);
+
+    }
+
+
+    .description {
+
+      margin:
+        0;
+
+      color:
+        var(--muted);
+
+      font-size:
+        14px;
+
+      line-height:
+        1.55;
+
+    }
+
+
+    /* ========================================
+       FORM
+    ========================================= */
+
+    .field {
+
+      margin-bottom:
+        17px;
+
+    }
+
+
+    label {
+
+      display:
+        block;
+
+      margin-bottom:
+        7px;
+
+      color:
+        var(--navy);
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+      font-size:
+        13px;
+
+      font-weight:
+        700;
+
+    }
+
+
+    input,
+    select {
+
+      width:
+        100%;
+
+      min-height:
+        48px;
+
+      padding:
+        12px 14px;
+
+      border:
+        1.5px solid var(--gray);
+
+      border-radius:
+        12px;
+
+      outline:
+        none;
+
+      background:
+        var(--white);
+
+      color:
+        #222;
+
+      font-family:
+        'Inter',
+        sans-serif;
+
+      font-size:
+        15px;
+
+      font-weight:
+        500;
+
+      transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+
+    }
+
+
+    input::placeholder {
+
+      color:
+        #9AA1AA;
+
+    }
+
+
+    input:hover,
+    select:hover {
+
+      border-color:
+        #B8BEC6;
+
+    }
+
+
+    input:focus,
+    select:focus {
+
+      border-color:
+        var(--navy);
+
+      box-shadow:
+        0 0 0 3px rgba(244,180,0,0.22);
+
+    }
+
+
+    input:disabled,
+    select:disabled {
+
+      background:
+        #F1F2F3;
+
+      color:
+        #7B838D;
+
+      cursor:
+        not-allowed;
+
+    }
+
+
+    /* ========================================
+       PERIOD
+    ========================================= */
+
+    .period-box {
+
+      width:
+        100%;
+
+      min-height:
+        48px;
+
+      padding:
+        12px 14px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      border:
+        1.5px dashed var(--gray);
+
+      border-radius:
+        12px;
+
+      background:
+        var(--off-white);
+
+      color:
+        var(--navy);
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+      font-size:
+        14px;
+
+      font-weight:
+        700;
+
+    }
+
+
+    /* ========================================
+       BUTTON
+    ========================================= */
+
+    button {
+
+      width:
+        100%;
+
+      min-height:
+        52px;
+
+      margin-top:
+        6px;
+
+      padding:
+        13px 16px;
+
+      border:
+        2px solid var(--navy);
+
+      border-radius:
+        13px;
+
+      background:
+        var(--yellow);
+
+      color:
+        var(--navy);
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+      font-size:
+        15px;
+
+      font-weight:
+        800;
+
+      letter-spacing:
+        0.2px;
+
+      cursor:
+        pointer;
+
+      box-shadow:
+        0 4px 0 var(--navy);
+
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        opacity 0.15s ease;
+
+    }
+
+
+    button:hover:not(:disabled) {
+
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 5px 0 var(--navy);
+
+    }
+
+
+    button:active:not(:disabled) {
+
+      transform:
+        translateY(3px);
+
+      box-shadow:
+        0 1px 0 var(--navy);
+
+    }
+
+
+    button:disabled {
+
+      opacity:
+        0.55;
+
+      cursor:
+        default;
+
+      box-shadow:
+        0 3px 0 #87909A;
+
+      border-color:
+        #87909A;
+
+    }
+
+
+    /* ========================================
+       MESSAGE
+    ========================================= */
+
+    .message {
+
+      margin-top:
+        20px;
+
+      padding:
+        14px;
+
+      border:
+        1.5px solid transparent;
+
+      border-radius:
+        12px;
+
+      font-size:
+        13px;
+
+      line-height:
+        1.55;
+
+      display:
+        none;
+
+    }
+
+
+    .message strong {
+
+      font-family:
+        'Poppins',
+        sans-serif;
+
+    }
+
+
+    .success {
+
+      display:
+        block;
+
+      background:
+        var(--success-bg);
+
+      color:
+        var(--success-text);
+
+      border-color:
+        #B9DFC4;
+
+    }
+
+
+    .error {
+
+      display:
+        block;
+
+      background:
+        var(--error-bg);
+
+      color:
+        var(--error-text);
+
+      border-color:
+        #F0C1C1;
+
+    }
+
+
+    .loading {
+
+      display:
+        block;
+
+      background:
+        var(--off-white);
+
+      color:
+        var(--navy);
+
+      border-color:
+        var(--gray);
+
+    }
+
+
+    /* ========================================
+       MOBILE
+    ========================================= */
+
+    @media (max-width: 520px) {
+
+      body {
+
+        padding:
+          16px;
+
+        align-items:
+          center;
+
+      }
+
+
+      .container {
+
+        border-radius:
+          20px;
+
+        box-shadow:
+          5px 5px 0 var(--yellow);
+
+      }
+
+
+      .top-bar {
+
+        padding:
+          16px 18px;
+
+      }
+
+
+      .content {
+
+        padding:
+          24px 18px 20px;
+
+      }
+
+
+      h1 {
+
+        font-size:
+          27px;
+
+      }
+
+    }
+
+
+    @media (max-width: 360px) {
+
+      body {
+
+        padding:
+          12px;
+
+      }
+
+
+      .content {
+
+        padding:
+          21px 16px 18px;
+
+      }
+
+
+      h1 {
+
+        font-size:
+          25px;
+
+      }
+
+
+      input,
+      select {
+
+        font-size:
+          14px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <div class="container">
+
+
+    <!-- ======================================
+         TOP BAR
+    ======================================= -->
+
+    <div class="top-bar">
+
+      <div class="brand-label">
+        STUDENT GAME CARD
+      </div>
+
+      <div class="card-badge">
+        PLAY
+      </div>
+
+    </div>
+
+
+    <!-- ======================================
+         CONTENT
+    ======================================= -->
+
+    <div class="content">
+
+
+      <!-- HEADER -->
+
+      <div class="header">
+
+        <div class="eyebrow">
+          CARD SETUP
+        </div>
+
+        <h1>
+          ACTIVATE YOUR CARD
+        </h1>
+
+        <p class="description">
+
+          Select your Card Code and enter
+          your student information to start
+          collecting your points.
+
+        </p>
+
+      </div>
+
+
+      <!-- CARD CODE -->
+
+      <div class="field">
+
+        <label for="cardCode">
+          Card Code
+        </label>
+
+        <select id="cardCode">
+
+          <option value="">
+            Loading available cards...
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- FULL NAME -->
+
+      <div class="field">
+
+        <label for="fullName">
+          Full Name
+        </label>
+
+        <input
+          id="fullName"
+          type="text"
+          placeholder="Enter your full name"
+          autocomplete="name"
+        >
+
+      </div>
+
+
+      <!-- NIM -->
+
+      <div class="field">
+
+        <label for="nim">
+          NIM
+        </label>
+
+        <input
+          id="nim"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="Enter your NIM"
+          autocomplete="off"
+        >
+
+      </div>
+
+
+      <!-- COURSE -->
+
+      <div class="field">
+
+        <label for="course">
+          Enrolled Practical Course
+        </label>
+
+        <select id="course">
+
+          <option value="">
+            Loading courses...
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- PERIOD -->
+
+      <div class="field">
+
+        <label>
+          Period
+        </label>
+
+        <div
+          id="period"
+          class="period-box"
+        >
+          Loading...
+        </div>
+
+      </div>
+
+
+      <!-- BUTTON -->
+
+      <button
+        id="activateButton"
+        onclick="activateCard()"
+        disabled
+      >
+        ACTIVATE CARD
+      </button>
+
+
+      <!-- MESSAGE -->
+
+      <div
+        id="message"
+        class="message"
+      ></div>
+
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+
+    // ========================================
+    // LOAD ACTIVATION CONFIG
+    // ========================================
+
+    window.onload = function() {
+
+      google.script.run
+
+        .withSuccessHandler(
+          function(result) {
+
+            if (
+              !result ||
+              !result.success
+            ) {
+
+              showMessage(
+                result?.message ||
+                'Failed to load activation data.',
+                'error'
+              );
+
+              return;
+
+            }
+
+
+            const data =
+              result.data;
+
+
+            // ================================
+            // CARD DROPDOWN
+            // ================================
+
+            const cardSelect =
+              document.getElementById(
+                'cardCode'
+              );
+
+
+            cardSelect.innerHTML = '';
+
+
+            const cardPlaceholder =
+              document.createElement(
+                'option'
+              );
+
+            cardPlaceholder.value =
+              '';
+
+            cardPlaceholder.textContent =
+              'Select your Card Code';
+
+            cardSelect.appendChild(
+              cardPlaceholder
+            );
+
+
+            data.cards.forEach(
+              function(cardCode) {
+
+                const option =
+                  document.createElement(
+                    'option'
+                  );
+
+                option.value =
+                  cardCode;
+
+                option.textContent =
+                  cardCode;
+
+                cardSelect.appendChild(
+                  option
+                );
+
+              }
+            );
+
+
+            // ================================
+            // COURSE DROPDOWN
+            // ================================
+
+            const courseSelect =
+              document.getElementById(
+                'course'
+              );
+
+
+            courseSelect.innerHTML = '';
+
+
+            const coursePlaceholder =
+              document.createElement(
+                'option'
+              );
+
+            coursePlaceholder.value =
+              '';
+
+            coursePlaceholder.textContent =
+              'Select your practical course';
+
+            courseSelect.appendChild(
+              coursePlaceholder
+            );
+
+
+            data.courses.forEach(
+              function(course) {
+
+                const option =
+                  document.createElement(
+                    'option'
+                  );
+
+                option.value =
+                  course;
+
+                option.textContent =
+                  course;
+
+                courseSelect.appendChild(
+                  option
+                );
+
+              }
+            );
+
+
+            // ================================
+            // CURRENT PERIOD
+            // ================================
+
+            document
+              .getElementById(
+                'period'
+              )
+              .textContent =
+              data.currentPeriod;
+
+
+            // ================================
+            // FORM EVENTS
+            // ================================
+
+            cardSelect
+              .addEventListener(
+                'change',
+                checkForm
+              );
+
+            courseSelect
+              .addEventListener(
+                'change',
+                checkForm
+              );
+
+
+            document
+              .getElementById(
+                'fullName'
+              )
+              .addEventListener(
+                'input',
+                checkForm
+              );
+
+
+            document
+              .getElementById(
+                'nim'
+              )
+              .addEventListener(
+                'input',
+                checkForm
+              );
+
+          }
+        )
+
+        .withFailureHandler(
+          function(error) {
+
+            showMessage(
+              'Failed to load activation data: ' +
+              error.message,
+              'error'
+            );
+
+          }
+        )
+
+        .getActivationConfig();
+
+    };
+
+
+    // ========================================
+    // CHECK FORM
+    // ========================================
+
+    function checkForm() {
+
+      const cardCode =
+        document
+          .getElementById('cardCode')
+          .value
+          .trim();
+
+      const fullName =
+        document
+          .getElementById('fullName')
+          .value
+          .trim();
+
+      const nim =
+        document
+          .getElementById('nim')
+          .value
+          .trim();
+
+      const course =
+        document
+          .getElementById('course')
+          .value
+          .trim();
+
+
+      document
+        .getElementById(
+          'activateButton'
+        )
+        .disabled = !(
+          cardCode &&
+          fullName &&
+          nim &&
+          course
+        );
+
+    }
+
+
+    // ========================================
+    // ACTIVATE CARD
+    // ========================================
+
+    function activateCard() {
+
+      const cardCode =
+        document
+          .getElementById('cardCode')
+          .value
+          .trim();
+
+      const fullName =
+        document
+          .getElementById('fullName')
+          .value
+          .trim();
+
+      const nim =
+        document
+          .getElementById('nim')
+          .value
+          .trim();
+
+      const course =
+        document
+          .getElementById('course')
+          .value
+          .trim();
+
+
+      if (
+        !cardCode ||
+        !fullName ||
+        !nim ||
+        !course
+      ) {
+
+        showMessage(
+          'Please complete all fields.',
+          'error'
+        );
+
+        return;
+
+      }
+
+
+      const button =
+        document.getElementById(
+          'activateButton'
+        );
+
+
+      button.disabled = true;
+
+      button.textContent =
+        'ACTIVATING...';
+
+
+      showMessage(
+        'Activating your card...',
+        'loading'
+      );
+
+
+      google.script.run
+
+        .withSuccessHandler(
+          function(result) {
+
+            if (
+              !result ||
+              !result.success
+            ) {
+
+              button.disabled = false;
+
+              button.textContent =
+                'ACTIVATE CARD';
+
+
+              showMessage(
+                result?.message ||
+                'Activation failed.',
+                'error'
+              );
+
+              return;
+
+            }
+
+
+            // ==============================
+            // SUCCESS
+            // ==============================
+
+            showMessage(
+
+              '✓ Card activated successfully!<br><br>' +
+
+              '<strong>' +
+              result.data.cardCode +
+              '</strong><br>' +
+
+              result.data.fullName +
+              '<br>' +
+
+              result.data.nim +
+              '<br>' +
+
+              result.data.course +
+              '<br><br>' +
+
+              'Period: ' +
+              result.data.period,
+
+              'success'
+
+            );
+
+
+            document
+              .getElementById(
+                'cardCode'
+              )
+              .disabled = true;
+
+
+            document
+              .getElementById(
+                'fullName'
+              )
+              .disabled = true;
+
+
+            document
+              .getElementById(
+                'nim'
+              )
+              .disabled = true;
+
+
+            document
+              .getElementById(
+                'course'
+              )
+              .disabled = true;
+
+
+            button.disabled = true;
+
+            button.textContent =
+              'CARD ACTIVATED';
+
+          }
+        )
+
+        .withFailureHandler(
+          function(error) {
+
+            button.disabled = false;
+
+            button.textContent =
+              'ACTIVATE CARD';
+
+
+            showMessage(
+              'Activation failed: ' +
+              error.message,
+              'error'
+            );
+
+          }
+        )
+
+        .activateCard(
+          cardCode,
+          fullName,
+          nim,
+          course
+        );
+
+    }
+
+
+    // ========================================
+    // MESSAGE
+    // ========================================
+
+    function showMessage(
+      text,
+      type
+    ) {
+
+      const message =
+        document.getElementById(
+          'message'
+        );
+
+
+      message.innerHTML =
+        text;
+
+      message.className =
+        'message ' + type;
+
+    }
+
+
+  </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Deactivate Student Card</title>
+
+
+  <!-- ==========================================
+       FONTS
+  =========================================== -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    /* ==========================================
+       RESET
+    =========================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    /* ==========================================
+       COLOR SYSTEM
+    =========================================== */
+
+    :root {
+
+      --navy: #1E3A5F;
+
+      --mustard: #F4B400;
+
+      --off-white: #F8F9FA;
+
+      --gray: #D9D9D9;
+
+      --text: #1E1E1E;
+
+      --muted: #6F7782;
+
+      --white: #FFFFFF;
+
+      --success-bg: #EAF7EE;
+
+      --success-text: #176B35;
+
+      --error-bg: #FDECEC;
+
+      --error-text: #A32121;
+
+    }
+
+
+    /* ==========================================
+       BODY
+    =========================================== */
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      padding: 24px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background:
+        radial-gradient(
+          circle at top right,
+          rgba(244,180,0,0.10),
+          transparent 30%
+        ),
+        var(--off-white);
+
+      color: var(--text);
+
+      font-family:
+        'Inter',
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    }
+
+
+    /* ==========================================
+       MAIN CONTAINER
+    =========================================== */
+
+    .container {
+
+      width: 100%;
+
+      max-width: 480px;
+
+    }
+
+
+    .card {
+
+      position: relative;
+
+      overflow: hidden;
+
+      background: var(--white);
+
+      border: 1px solid rgba(30,58,95,0.08);
+
+      border-radius: 24px;
+
+      padding: 32px 28px;
+
+      box-shadow:
+        0 18px 45px rgba(30,58,95,0.10);
+
+    }
+
+
+    /* Decorative top bar */
+
+    .card::before {
+
+      content: '';
+
+      position: absolute;
+
+      top: 0;
+
+      left: 0;
+
+      right: 0;
+
+      height: 6px;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--navy) 0%,
+          var(--navy) 72%,
+          var(--mustard) 72%,
+          var(--mustard) 100%
+        );
+
+    }
+
+
+    /* ==========================================
+       HEADER
+    =========================================== */
+
+    h1 {
+
+      margin: 0;
+
+      color: var(--navy);
+
+      text-align: center;
+
+      font-family: 'Poppins', sans-serif;
+
+      font-size: 24px;
+
+      font-weight: 800;
+
+      letter-spacing: -0.5px;
+
+    }
+
+
+    .subtitle {
+
+      margin: 9px 0 28px;
+
+      color: var(--muted);
+
+      text-align: center;
+
+      font-size: 13px;
+
+      line-height: 1.6;
+
+    }
+
+
+    /* ==========================================
+       LOADING
+    =========================================== */
+
+    .loading {
+
+      padding: 42px 10px;
+
+      color: var(--muted);
+
+      text-align: center;
+
+      font-size: 13px;
+
+      line-height: 1.5;
+
+    }
+
+
+    .spinner {
+
+      width: 28px;
+
+      height: 28px;
+
+      margin: 0 auto 14px;
+
+      border: 3px solid rgba(30,58,95,0.12);
+
+      border-top-color: var(--mustard);
+
+      border-right-color: var(--navy);
+
+      border-radius: 50%;
+
+      animation:
+        spin 0.8s linear infinite;
+
+    }
+
+
+    @keyframes spin {
+
+      to {
+        transform: rotate(360deg);
+      }
+
+    }
+
+
+    /* ==========================================
+       FIELD
+    =========================================== */
+
+    .field {
+
+      margin-bottom: 18px;
+
+    }
+
+
+    label {
+
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: var(--navy);
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.2px;
+
+      text-transform: uppercase;
+
+    }
+
+
+    select {
+
+      width: 100%;
+
+      padding: 13px 14px;
+
+      border: 1.5px solid var(--gray);
+
+      border-radius: 12px;
+
+      background: var(--white);
+
+      color: var(--text);
+
+      font-family: 'Inter', sans-serif;
+
+      font-size: 14px;
+
+      font-weight: 500;
+
+      outline: none;
+
+      transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+
+    }
+
+
+    select:focus {
+
+      border-color: var(--navy);
+
+      box-shadow:
+        0 0 0 3px rgba(30,58,95,0.08);
+
+    }
+
+
+    select:disabled {
+
+      background: #F1F2F3;
+
+      color: #999;
+
+    }
+
+
+    /* ==========================================
+       CARD DETAILS
+    =========================================== */
+
+    .details {
+
+      display: none;
+
+      margin-top: 22px;
+
+      padding: 17px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #F8F9FA,
+          #F2F5F8
+        );
+
+      border: 1px solid rgba(30,58,95,0.08);
+
+      border-radius: 16px;
+
+    }
+
+
+    .detail-row {
+
+      display: flex;
+
+      align-items: flex-start;
+
+      justify-content: space-between;
+
+      gap: 20px;
+
+      padding: 10px 0;
+
+      border-bottom:
+        1px solid rgba(30,58,95,0.08);
+
+      font-size: 13px;
+
+      line-height: 1.45;
+
+    }
+
+
+    .detail-row:first-child {
+
+      padding-top: 0;
+
+    }
+
+
+    .detail-row:last-child {
+
+      padding-bottom: 0;
+
+      border-bottom: none;
+
+    }
+
+
+    .detail-label {
+
+      flex-shrink: 0;
+
+      color: var(--muted);
+
+      font-weight: 500;
+
+    }
+
+
+    .detail-value {
+
+      max-width: 62%;
+
+      color: var(--navy);
+
+      font-weight: 700;
+
+      text-align: right;
+
+      word-break: break-word;
+
+    }
+
+
+    /* Status */
+
+    #status {
+
+      display: inline-block;
+
+      padding: 4px 9px;
+
+      border-radius: 999px;
+
+      background: rgba(244,180,0,0.16);
+
+      color: #8A6200;
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: 0.2px;
+
+      text-transform: uppercase;
+
+    }
+
+
+    /* ==========================================
+       MAIN BUTTON
+    =========================================== */
+
+    .deactivate-button {
+
+      width: 100%;
+
+      margin-top: 20px;
+
+      padding: 14px 16px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      background: var(--navy);
+
+      color: var(--white);
+
+      font-family: 'Poppins', sans-serif;
+
+      font-size: 14px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.2px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 7px 16px rgba(30,58,95,0.18);
+
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+
+    }
+
+
+    .deactivate-button:hover:not(:disabled) {
+
+      background: #17314F;
+
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 9px 20px rgba(30,58,95,0.22);
+
+    }
+
+
+    .deactivate-button:active:not(:disabled) {
+
+      transform: translateY(0);
+
+    }
+
+
+    .deactivate-button:disabled {
+
+      opacity: 0.45;
+
+      cursor: default;
+
+      box-shadow: none;
+
+    }
+
+
+    /* ==========================================
+       CONFIRMATION
+    =========================================== */
+
+    .confirmation {
+
+      display: none;
+
+      margin-top: 18px;
+
+      padding: 17px;
+
+      background:
+        rgba(244,180,0,0.10);
+
+      border:
+        1px solid rgba(244,180,0,0.35);
+
+      border-radius: 15px;
+
+      color: #665000;
+
+      font-size: 13px;
+
+      line-height: 1.6;
+
+    }
+
+
+    .confirmation strong {
+
+      color: var(--navy);
+
+      font-family: 'Poppins', sans-serif;
+
+      font-size: 14px;
+
+    }
+
+
+    .confirmation-buttons {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 16px;
+
+    }
+
+
+    .confirmation-buttons button {
+
+      flex: 1;
+
+      padding: 12px;
+
+      border: none;
+
+      border-radius: 10px;
+
+      font-family: 'Poppins', sans-serif;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+
+    }
+
+
+    .confirmation-buttons button:hover {
+
+      transform: translateY(-1px);
+
+    }
+
+
+    .cancel-button {
+
+      background: var(--gray);
+
+      color: var(--text);
+
+    }
+
+
+    .confirm-button {
+
+      background: var(--mustard);
+
+      color: #3A2A00;
+
+    }
+
+
+    /* ==========================================
+       MESSAGE
+    =========================================== */
+
+    .message {
+
+      display: none;
+
+      margin-top: 18px;
+
+      padding: 14px 15px;
+
+      border-radius: 12px;
+
+      font-size: 13px;
+
+      line-height: 1.55;
+
+    }
+
+
+    .message.success {
+
+      display: block;
+
+      background: var(--success-bg);
+
+      color: var(--success-text);
+
+      border:
+        1px solid rgba(23,107,53,0.10);
+
+    }
+
+
+    .message.error {
+
+      display: block;
+
+      background: var(--error-bg);
+
+      color: var(--error-text);
+
+      border:
+        1px solid rgba(163,33,33,0.10);
+
+    }
+
+
+    .message.loading {
+
+      display: block;
+
+      background: #F1F3F5;
+
+      color: var(--muted);
+
+      border:
+        1px solid rgba(30,58,95,0.06);
+
+    }
+
+
+    /* ==========================================
+       BUTTON CONTENT
+    =========================================== */
+
+    .button-content {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 9px;
+
+    }
+
+
+    .button-spinner {
+
+      display: none;
+
+      width: 16px;
+
+      height: 16px;
+
+      border: 2px solid rgba(255,255,255,0.35);
+
+      border-top-color: #fff;
+
+      border-radius: 50%;
+
+      animation:
+        spin 0.8s linear infinite;
+
+    }
+
+
+    .button-spinner.active {
+
+      display: inline-block;
+
+    }
+
+
+    /* ==========================================
+       MOBILE
+    =========================================== */
+
+    @media (max-width: 520px) {
+
+      body {
+
+        padding: 16px;
+
+        align-items: flex-start;
+
+      }
+
+
+      .container {
+
+        margin-top: 20px;
+
+      }
+
+
+      .card {
+
+        padding: 29px 20px 22px;
+
+        border-radius: 21px;
+
+      }
+
+
+      h1 {
+
+        font-size: 22px;
+
+      }
+
+
+      .subtitle {
+
+        margin-bottom: 24px;
+
+      }
+
+
+      .detail-row {
+
+        gap: 12px;
+
+      }
+
+
+      .detail-value {
+
+        max-width: 58%;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+
+    <h1>
+      DEACTIVATE CARD
+    </h1>
+
+    <div class="subtitle">
+      Close the current activation period
+      of an active student game card.
+    </div>
+
+
+    <!-- ============================== -->
+    <!-- LOADING -->
+    <!-- ============================== -->
+
+    <div
+      id="loadingScreen"
+      class="loading"
+    >
+
+      <div class="spinner"></div>
+
+      Loading active cards...
+
+    </div>
+
+
+    <!-- ============================== -->
+    <!-- MAIN -->
+    <!-- ============================== -->
+
+    <div
+      id="mainContent"
+      style="display:none;"
+    >
+
+
+      <!-- CARD CODE -->
+
+      <div class="field">
+
+        <label for="cardCode">
+          Card Code
+        </label>
+
+        <select
+          id="cardCode"
+          onchange="handleCardChange()"
+        >
+
+          <option value="">
+            Select Card Code
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ============================== -->
+      <!-- CARD DETAILS -->
+      <!-- ============================== -->
+
+      <div
+        id="details"
+        class="details"
+      >
+
+        <div class="detail-row">
+
+          <span class="detail-label">
+            Full Name
+          </span>
+
+          <span
+            id="fullName"
+            class="detail-value"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span class="detail-label">
+            NIM
+          </span>
+
+          <span
+            id="nim"
+            class="detail-value"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span class="detail-label">
+            Practical Course
+          </span>
+
+          <span
+            id="course"
+            class="detail-value"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <span class="detail-label">
+            Status
+          </span>
+
+          <span
+            id="status"
+            class="detail-value"
+          >
+            Active
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ============================== -->
+      <!-- DEACTIVATE -->
+      <!-- ============================== -->
+
+      <button
+        id="deactivateButton"
+        class="deactivate-button"
+        onclick="askDeactivation()"
+        disabled
+      >
+
+        <span class="button-content">
+
+          <span id="buttonText">
+            DEACTIVATE CARD
+          </span>
+
+          <span
+            id="buttonSpinner"
+            class="button-spinner"
+          ></span>
+
+        </span>
+
+      </button>
+
+
+      <!-- ============================== -->
+      <!-- CONFIRMATION -->
+      <!-- ============================== -->
+
+      <div
+        id="confirmation"
+        class="confirmation"
+      >
+
+        <strong>
+          Deactivate this card?
+        </strong>
+
+        <br><br>
+
+        This will close the current activation
+        period and return the card to inactive status.
+
+        <div class="confirmation-buttons">
+
+          <button
+            class="cancel-button"
+            onclick="cancelDeactivation()"
+          >
+            CANCEL
+          </button>
+
+          <button
+            class="confirm-button"
+            onclick="confirmDeactivation()"
+          >
+            DEACTIVATE
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ============================== -->
+      <!-- MESSAGE -->
+      <!-- ============================== -->
+
+      <div
+        id="message"
+        class="message"
+      ></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+// ==================================================
+// STATE
+// ==================================================
+
+let activeCards = [];
+
+let selectedCard = null;
+
+
+// ==================================================
+// LOAD ACTIVE CARDS
+// ==================================================
+
+function loadActiveCards() {
+
+  showLoading();
+
+
+  google.script.run
+
+    .withSuccessHandler(function(result) {
+
+      console.log(
+        'loadCardsForDeactivation result:',
+        result
+      );
+
+
+      if (
+        !result ||
+        result.success !== true
+      ) {
+
+        showInitialError(
+          result &&
+          result.message
+            ? result.message
+            : 'Failed to load active cards.'
+        );
+
+        return;
+
+      }
+
+
+      activeCards =
+        Array.isArray(result.data)
+          ? result.data
+          : [];
+
+
+      populateDropdown();
+
+
+      document
+        .getElementById('loadingScreen')
+        .style.display = 'none';
+
+
+      document
+        .getElementById('mainContent')
+        .style.display = 'block';
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      console.error(
+        'loadCardsForDeactivation error:',
+        error
+      );
+
+
+      showInitialError(
+        error &&
+        error.message
+          ? error.message
+          : String(error)
+      );
+
+    })
+
+    .loadCardsForDeactivation();
+
+}
+
+
+// ==================================================
+// POPULATE DROPDOWN
+// ==================================================
+
+function populateDropdown() {
+
+  const select =
+    document.getElementById(
+      'cardCode'
+    );
+
+
+  select.innerHTML = '';
+
+
+  const defaultOption =
+    document.createElement(
+      'option'
+    );
+
+
+  defaultOption.value = '';
+
+
+  defaultOption.textContent =
+    activeCards.length > 0
+      ? 'Select Card Code'
+      : 'No active cards available';
+
+
+  select.appendChild(
+    defaultOption
+  );
+
+
+  activeCards.forEach(function(card) {
+
+    const option =
+      document.createElement(
+        'option'
+      );
+
+
+    option.value =
+      card.cardCode;
+
+
+    option.textContent =
+      card.cardCode;
+
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+
+  select.disabled =
+    activeCards.length === 0;
+
+}
+
+
+// ==================================================
+// CARD SELECTION
+// ==================================================
+
+function handleCardChange() {
+
+  const cardCode =
+    document
+      .getElementById(
+        'cardCode'
+      )
+      .value;
+
+
+  selectedCard =
+    activeCards.find(function(card) {
+
+      return (
+        String(card.cardCode) ===
+        String(cardCode)
+      );
+
+    }) || null;
+
+
+  hideMessage();
+
+
+  const details =
+    document.getElementById(
+      'details'
+    );
+
+
+  const button =
+    document.getElementById(
+      'deactivateButton'
+    );
+
+
+  if (!selectedCard) {
+
+    details.style.display =
+      'none';
+
+    button.disabled =
+      true;
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      'fullName'
+    )
+    .textContent =
+    selectedCard.fullName || '-';
+
+
+  document
+    .getElementById(
+      'nim'
+    )
+    .textContent =
+    selectedCard.nim || '-';
+
+
+  document
+    .getElementById(
+      'course'
+    )
+    .textContent =
+    selectedCard.course || '-';
+
+
+  document
+    .getElementById(
+      'status'
+    )
+    .textContent =
+    selectedCard.status || 'Active';
+
+
+  details.style.display =
+    'block';
+
+
+  button.disabled =
+    false;
+
+}
+
+
+// ==================================================
+// ASK CONFIRMATION
+// ==================================================
+
+function askDeactivation() {
+
+  if (!selectedCard) {
+    return;
+  }
+
+
+  document
+    .getElementById(
+      'confirmation'
+    )
+    .style.display =
+    'block';
+
+
+  document
+    .getElementById(
+      'deactivateButton'
+    )
+    .disabled =
+    true;
+
+}
+
+
+// ==================================================
+// CANCEL CONFIRMATION
+// ==================================================
+
+function cancelDeactivation() {
+
+  document
+    .getElementById(
+      'confirmation'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'deactivateButton'
+    )
+    .disabled =
+    false;
+
+}
+
+
+// ==================================================
+// CONFIRM DEACTIVATION
+// ==================================================
+
+function confirmDeactivation() {
+
+  if (!selectedCard) {
+    return;
+  }
+
+
+  const cardCode =
+    selectedCard.cardCode;
+
+
+  setButtonLoading(true);
+
+
+  document
+    .getElementById(
+      'confirmation'
+    )
+    .style.display =
+    'none';
+
+
+  showMessage(
+    'Deactivating card...<br>Please wait.',
+    'loading'
+  );
+
+
+  google.script.run
+
+    .withSuccessHandler(function(result) {
+
+      console.log(
+        'deactivateCard result:',
+        result
+      );
+
+
+      setButtonLoading(false);
+
+
+      if (
+        !result ||
+        result.success !== true
+      ) {
+
+        showMessage(
+          result &&
+          result.message
+            ? result.message
+            : 'Deactivation failed.',
+          'error'
+        );
+
+
+        document
+          .getElementById(
+            'deactivateButton'
+          )
+          .disabled =
+          false;
+
+
+        return;
+
+      }
+
+
+      const data =
+        result.data || {};
+
+
+      showMessage(
+
+        '<strong>Card deactivated successfully.</strong>' +
+        '<br><br>' +
+
+        'Card Code: ' +
+        (data.cardCode || cardCode) +
+
+        '<br>' +
+
+        'Student: ' +
+        (data.fullName ||
+         selectedCard.fullName ||
+         '-') +
+
+        (
+          data.duration
+            ? '<br>Duration: ' +
+              data.duration
+            : ''
+        ),
+
+        'success'
+
+      );
+
+
+      // Remove deactivated card
+      // from current active-card list
+
+      activeCards =
+        activeCards.filter(function(card) {
+
+          return (
+            String(card.cardCode) !==
+            String(cardCode)
+          );
+
+        });
+
+
+      selectedCard =
+        null;
+
+
+      resetAfterSuccess();
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      console.error(
+        'deactivateCard error:',
+        error
+      );
+
+
+      setButtonLoading(false);
+
+
+      showMessage(
+
+        'Deactivation failed.<br><br>' +
+
+        (
+          error &&
+          error.message
+            ? error.message
+            : String(error)
+        ),
+
+        'error'
+
+      );
+
+
+      document
+        .getElementById(
+          'deactivateButton'
+        )
+        .disabled =
+        false;
+
+    })
+
+    .deactivateCard(
+      cardCode
+    );
+
+}
+
+
+// ==================================================
+// RESET AFTER SUCCESS
+// ==================================================
+
+function resetAfterSuccess() {
+
+  const select =
+    document.getElementById(
+      'cardCode'
+    );
+
+
+  select.innerHTML = '';
+
+
+  const defaultOption =
+    document.createElement(
+      'option'
+    );
+
+
+  defaultOption.value = '';
+
+
+  defaultOption.textContent =
+    activeCards.length > 0
+      ? 'Select Card Code'
+      : 'No active cards available';
+
+
+  select.appendChild(
+    defaultOption
+  );
+
+
+  activeCards.forEach(function(card) {
+
+    const option =
+      document.createElement(
+        'option'
+      );
+
+
+    option.value =
+      card.cardCode;
+
+
+    option.textContent =
+      card.cardCode;
+
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+
+  select.disabled =
+    activeCards.length === 0;
+
+
+  document
+    .getElementById(
+      'details'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'deactivateButton'
+    )
+    .disabled =
+    true;
+
+
+  document
+    .getElementById(
+      'confirmation'
+    )
+    .style.display =
+    'none';
+
+}
+
+
+// ==================================================
+// BUTTON LOADING
+// ==================================================
+
+function setButtonLoading(
+  loading
+) {
+
+  const button =
+    document.getElementById(
+      'deactivateButton'
+    );
+
+
+  const text =
+    document.getElementById(
+      'buttonText'
+    );
+
+
+  const spinner =
+    document.getElementById(
+      'buttonSpinner'
+    );
+
+
+  if (loading) {
+
+    button.disabled =
+      true;
+
+    text.textContent =
+      'DEACTIVATING...';
+
+    spinner.classList.add(
+      'active'
+    );
+
+  } else {
+
+    text.textContent =
+      'DEACTIVATE CARD';
+
+    spinner.classList.remove(
+      'active'
+    );
+
+  }
+
+}
+
+
+// ==================================================
+// LOADING SCREEN
+// ==================================================
+
+function showLoading() {
+
+  document
+    .getElementById(
+      'loadingScreen'
+    )
+    .style.display =
+    'block';
+
+
+  document
+    .getElementById(
+      'mainContent'
+    )
+    .style.display =
+    'none';
+
+}
+
+
+// ==================================================
+// INITIAL ERROR
+// ==================================================
+
+function showInitialError(
+  message
+) {
+
+  const loadingScreen =
+    document.getElementById(
+      'loadingScreen'
+    );
+
+
+  loadingScreen.innerHTML =
+
+    '<strong>' +
+    'Failed to load active cards.' +
+    '</strong>' +
+
+    '<br><br>' +
+
+    '<span style="font-size:13px;">' +
+
+    message +
+
+    '</span>';
+
+}
+
+
+// ==================================================
+// MESSAGE
+// ==================================================
+
+function showMessage(
+  text,
+  type
+) {
+
+  const message =
+    document.getElementById(
+      'message'
+    );
+
+
+  message.innerHTML =
+    text;
+
+
+  message.className =
+    'message ' + type;
+
+
+  message.style.display =
+    'block';
+
+}
+
+
+function hideMessage() {
+
+  const message =
+    document.getElementById(
+      'message'
+    );
+
+
+  message.innerHTML =
+    '';
+
+
+  message.style.display =
+    'none';
+
+}
+
+
+// ==================================================
+// START
+// ==================================================
+
+loadActiveCards();
+
+</script>
+
+</body>
+</html>

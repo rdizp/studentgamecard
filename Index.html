@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <base target="_top">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <!-- QR Scanner Library -->
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript"
+  ></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+
+    :root {
+      --navy: #1E3A5F;
+      --mustard: #F4B400;
+      --off-white: #F8F9FA;
+      --gray: #D9D9D9;
+      --text: #18212F;
+      --muted: #697586;
+      --success-bg: #EAF7EE;
+      --success-text: #176B35;
+      --error-bg: #FDECEC;
+      --error-text: #A32121;
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      padding:
+        20px
+        16px
+        max(
+          20px,
+          env(safe-area-inset-bottom)
+        );
+
+      background: var(--off-white);
+
+      color: var(--text);
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    }
+
+
+    /* ==========================================
+       MAIN CARD
+       ========================================== */
+
+    .app-card {
+
+      width: 100%;
+
+      max-width: 500px;
+
+      margin: 0 auto;
+
+      background: #ffffff;
+
+      border:
+        1px solid var(--gray);
+
+      border-radius: 24px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 10px 35px rgba(30, 58, 95, 0.10);
+
+    }
+
+
+    /* ==========================================
+       HEADER
+       ========================================== */
+
+    .app-header {
+
+      padding: 24px 22px 22px;
+
+      background: var(--navy);
+
+      color: white;
+
+      position: relative;
+
+      overflow: hidden;
+
+    }
+
+
+    .app-header::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 130px;
+
+      height: 130px;
+
+      border-radius: 50%;
+
+      background: rgba(244, 180, 0, 0.15);
+
+      right: -45px;
+
+      top: -55px;
+
+    }
+
+
+    .brand-row {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      position: relative;
+
+      z-index: 1;
+
+    }
+
+
+    .brand-dot {
+
+      width: 11px;
+
+      height: 11px;
+
+      border-radius: 50%;
+
+      background: var(--mustard);
+
+      flex-shrink: 0;
+
+    }
+
+
+    .brand-name {
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.12em;
+
+      text-transform: uppercase;
+
+      opacity: 0.9;
+
+    }
+
+
+    .app-header h1 {
+
+      margin: 18px 0 5px;
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 25px;
+
+      line-height: 1.2;
+
+      font-weight: 800;
+
+      position: relative;
+
+      z-index: 1;
+
+    }
+
+
+    .app-header p {
+
+      margin: 0;
+
+      font-size: 13px;
+
+      line-height: 1.5;
+
+      color: rgba(255,255,255,0.78);
+
+      position: relative;
+
+      z-index: 1;
+
+    }
+
+
+    /* ==========================================
+       CONTENT
+       ========================================== */
+
+    .content {
+
+      padding: 22px;
+
+    }
+
+
+    /* ==========================================
+       CARD CODE
+       ========================================== */
+
+    .card-code-box {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 12px;
+
+      padding: 14px 15px;
+
+      background: #F4F7FA;
+
+      border: 1px solid #E2E7ED;
+
+      border-radius: 14px;
+
+      margin-bottom: 22px;
+
+    }
+
+
+    .card-code-label {
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.08em;
+
+      color: var(--muted);
+
+    }
+
+
+    .card-code-value {
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 16px;
+
+      font-weight: 800;
+
+      color: var(--navy);
+
+      text-align: right;
+
+      word-break: break-word;
+
+    }
+
+
+    /* ==========================================
+       INFORMATION
+       ========================================== */
+
+    .info-section {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 15px;
+
+    }
+
+
+    .info-item {
+
+      display: grid;
+
+      grid-template-columns: 1fr;
+
+      gap: 4px;
+
+    }
+
+
+    .label {
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      color: var(--muted);
+
+      text-transform: uppercase;
+
+      letter-spacing: 0.055em;
+
+    }
+
+
+    .value {
+
+      font-size: 16px;
+
+      line-height: 1.4;
+
+      font-weight: 600;
+
+      color: var(--text);
+
+      word-break: break-word;
+
+    }
+
+
+    /* ==========================================
+       STATUS
+       ========================================== */
+
+    .status {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 8px;
+
+      margin-top: 22px;
+
+      padding: 13px 15px;
+
+      border-radius: 13px;
+
+      font-size: 13px;
+
+      font-weight: 800;
+
+      letter-spacing: 0.03em;
+
+      text-align: center;
+
+    }
+
+
+    .status.active {
+
+      background: var(--success-bg);
+
+      color: var(--success-text);
+
+    }
+
+
+    .status.inactive {
+
+      background: var(--error-bg);
+
+      color: var(--error-text);
+
+    }
+
+
+    /* ==========================================
+       SCORE SECTION
+       ========================================== */
+
+    #scoreSection {
+
+      margin-top: 28px;
+
+      padding-top: 24px;
+
+      border-top: 1px solid #ECEFF2;
+
+    }
+
+
+    .section-heading {
+
+      margin-bottom: 14px;
+
+    }
+
+
+    .section-heading h2 {
+
+      margin: 0;
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 19px;
+
+      font-weight: 800;
+
+      color: var(--navy);
+
+    }
+
+
+    .section-heading p {
+
+      margin: 4px 0 0;
+
+      font-size: 12px;
+
+      color: var(--muted);
+
+    }
+
+
+    /* ==========================================
+       SCORE BUTTONS
+       ========================================== */
+
+    .score-buttons {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 10px;
+
+    }
+
+
+    .score-buttons button {
+
+      min-height: 58px;
+
+      border: 1px solid #DCE2E8;
+
+      border-radius: 15px;
+
+      background: white;
+
+      color: var(--navy);
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 18px;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 3px 8px rgba(30,58,95,0.06);
+
+      transition:
+        transform 0.12s ease,
+        background 0.12s ease,
+        border-color 0.12s ease;
+
+    }
+
+
+    .score-buttons button:hover {
+
+      background: #FFF8E5;
+
+      border-color: var(--mustard);
+
+    }
+
+
+    .score-buttons button:active {
+
+      transform: scale(0.96);
+
+      background: var(--mustard);
+
+      border-color: var(--mustard);
+
+      color: var(--navy);
+
+    }
+
+
+    .score-buttons button:disabled {
+
+      opacity: 0.5;
+
+      cursor: wait;
+
+    }
+
+
+    /* ==========================================
+       RECORD MESSAGE
+       ========================================== */
+
+    #recordMessage {
+
+      min-height: 22px;
+
+      margin-top: 13px;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+      text-align: center;
+
+    }
+
+
+    .success {
+
+      color: var(--success-text);
+
+    }
+
+
+    .error {
+
+      color: var(--error-text);
+
+    }
+
+
+    /* ==========================================
+       SCAN ANOTHER BUTTON
+       ========================================== */
+
+    #scanAnotherButton {
+
+      width: 100%;
+
+      margin-top: 13px;
+
+      padding: 14px;
+
+      border: none;
+
+      border-radius: 13px;
+
+      background: var(--mustard);
+
+      color: var(--navy);
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+      font-size: 14px;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 14px rgba(244,180,0,0.22);
+
+      transition:
+        transform 0.12s ease;
+
+    }
+
+
+    #scanAnotherButton:active {
+
+      transform: scale(0.98);
+
+    }
+
+
+    /* ==========================================
+       SCANNER
+       ========================================== */
+
+    #scannerSection {
+
+      margin-top: 24px;
+
+      padding-top: 24px;
+
+      border-top: 1px solid #ECEFF2;
+
+    }
+
+
+    #scannerTitle {
+
+      margin: 0 0 14px;
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 18px;
+
+      font-weight: 800;
+
+      color: var(--navy);
+
+      text-align: center;
+
+    }
+
+
+    #reader {
+
+      width: 100%;
+
+      overflow: hidden;
+
+      border:
+        1px solid var(--gray);
+
+      border-radius: 16px;
+
+      background: #111;
+
+    }
+
+
+    /*
+      html5-qrcode injects its own UI.
+      Keep it contained and readable.
+    */
+
+    #reader video {
+
+      border-radius: 15px;
+
+    }
+
+
+    #reader button {
+
+      border: none !important;
+
+      border-radius: 9px !important;
+
+      padding: 9px 13px !important;
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif !important;
+
+      font-weight: 700 !important;
+
+    }
+
+
+    #scannerMessage {
+
+      margin-top: 11px;
+
+      font-size: 12px;
+
+      line-height: 1.5;
+
+      color: var(--muted);
+
+      text-align: center;
+
+    }
+
+
+    #closeScannerButton {
+
+      width: 100%;
+
+      margin-top: 13px;
+
+      padding: 13px;
+
+      border: 1px solid var(--gray);
+
+      border-radius: 12px;
+
+      background: white;
+
+      color: var(--navy);
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+    }
+
+
+    #closeScannerButton:active {
+
+      background: #F1F3F5;
+
+    }
+
+
+    /* ==========================================
+       RESPONSIVE
+       ========================================== */
+
+    @media (min-width: 480px) {
+
+      body {
+
+        padding-top: 40px;
+
+        padding-bottom: 40px;
+
+      }
+
+
+      .content {
+
+        padding: 25px;
+
+      }
+
+    }
+
+
+    @media (max-width: 360px) {
+
+      body {
+
+        padding-left: 10px;
+
+        padding-right: 10px;
+
+      }
+
+
+      .app-header {
+
+        padding-left: 18px;
+
+        padding-right: 18px;
+
+      }
+
+
+      .content {
+
+        padding: 18px;
+
+      }
+
+
+      .app-header h1 {
+
+        font-size: 22px;
+
+      }
+
+
+      .value {
+
+        font-size: 15px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="app-card">
+
+
+    <!-- ======================================
+         HEADER
+         ====================================== -->
+
+    <header class="app-header">
+
+      <div class="brand-row">
+
+        <span class="brand-dot"></span>
+
+        <span class="brand-name">
+          Student Game Card
+        </span>
+
+      </div>
+
+
+      <h1>
+        Player Card
+      </h1>
+
+
+      <p>
+        Scan, verify, and record game points.
+      </p>
+
+    </header>
+
+
+    <!-- ======================================
+         CONTENT
+         ====================================== -->
+
+    <main class="content">
+
+
+      <!-- CARD CODE -->
+
+      <div class="card-code-box">
+
+        <div class="card-code-label">
+          Card Code
+        </div>
+
+        <div
+          class="card-code-value"
+          id="cardCode"
+        >
+          -
+        </div>
+
+      </div>
+
+
+      <!-- CARD INFORMATION -->
+
+      <div class="info-section">
+
+
+        <div class="info-item">
+
+          <div class="label">
+            Full Name
+          </div>
+
+          <div
+            class="value"
+            id="fullName"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div class="info-item">
+
+          <div class="label">
+            NIM
+          </div>
+
+          <div
+            class="value"
+            id="nim"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div class="info-item">
+
+          <div class="label">
+            Enrolled Practical Course
+          </div>
+
+          <div
+            class="value"
+            id="course"
+          >
+            -
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div
+        id="status"
+        class="status"
+      >
+        Loading...
+      </div>
+
+
+      <!-- ====================================
+           SCORE SECTION
+           ==================================== -->
+
+      <div
+        id="scoreSection"
+        style="display: none;"
+      >
+
+
+        <div class="section-heading">
+
+          <h2>
+            Record Points
+          </h2>
+
+          <p>
+            Tap the points earned by the player.
+          </p>
+
+        </div>
+
+
+        <div class="score-buttons">
+
+          <button
+            onclick="recordScore(1)"
+          >
+            +1
+          </button>
+
+          <button
+            onclick="recordScore(2)"
+          >
+            +2
+          </button>
+
+          <button
+            onclick="recordScore(3)"
+          >
+            +3
+          </button>
+
+          <button
+            onclick="recordScore(5)"
+          >
+            +5
+          </button>
+
+        </div>
+
+
+        <div
+          id="recordMessage"
+        ></div>
+
+
+        <button
+          id="scanAnotherButton"
+          onclick="scanAnotherPlayer()"
+          style="display: none;"
+        >
+          📷 Scan Another Player
+        </button>
+
+      </div>
+
+
+      <!-- ====================================
+           SCANNER SECTION
+           ==================================== -->
+
+      <div
+        id="scannerSection"
+        style="display: none;"
+      >
+
+        <h3 id="scannerTitle">
+          Scan Another Player
+        </h3>
+
+
+        <div id="reader"></div>
+
+
+        <div id="scannerMessage">
+          Point the camera at the player's QR code.
+        </div>
+
+
+        <button
+          id="closeScannerButton"
+          onclick="closeScanner()"
+        >
+          Close Scanner
+        </button>
+
+      </div>
+
+
+    </main>
+
+  </div>
+
+
+  <script>
+
+
+    // ==========================================
+    // CARD DATA
+    // ==========================================
+
+    const cardData =
+      <?!= JSON.stringify(cardData) ?>;
+
+
+    // ==========================================
+    // DISPLAY CARD DATA
+    // ==========================================
+
+    function displayCard(data) {
+
+      document.getElementById('cardCode').textContent =
+        data.cardCode || '-';
+
+      document.getElementById('fullName').textContent =
+        data.fullName || '-';
+
+      document.getElementById('nim').textContent =
+        data.nim || '-';
+
+      document.getElementById('course').textContent =
+        data.course || '-';
+
+      updateStatus(data);
+
+    }
+
+
+    // ==========================================
+    // UPDATE STATUS
+    // ==========================================
+
+    function updateStatus(data) {
+
+      const statusElement =
+        document.getElementById('status');
+
+      const scoreSection =
+        document.getElementById('scoreSection');
+
+
+      const isActive =
+        String(data.status)
+          .trim()
+          .toLowerCase() === 'active';
+
+
+      statusElement.className =
+        'status';
+
+
+      if (isActive) {
+
+        statusElement.textContent =
+          '🟢 ACTIVE';
+
+        statusElement.classList.add(
+          'active'
+        );
+
+        scoreSection.style.display =
+          'block';
+
+      } else {
+
+        statusElement.textContent =
+          '🔴 CARD NOT ACTIVE';
+
+        statusElement.classList.add(
+          'inactive'
+        );
+
+        scoreSection.style.display =
+          'none';
+
+      }
+
+    }
+
+
+    // ==========================================
+    // INITIAL DISPLAY
+    // ==========================================
+
+    displayCard(cardData);
+
+
+    // ==========================================
+    // RECORD SCORE
+    // ==========================================
+
+    function recordScore(points) {
+
+      const buttons =
+        document.querySelectorAll(
+          '.score-buttons button'
+        );
+
+      const message =
+        document.getElementById(
+          'recordMessage'
+        );
+
+      const scanButton =
+        document.getElementById(
+          'scanAnotherButton'
+        );
+
+
+      buttons.forEach(function(button) {
+
+        button.disabled = true;
+
+      });
+
+
+      scanButton.style.display =
+        'none';
+
+
+      message.textContent =
+        'Recording...';
+
+      message.className = '';
+
+
+      google.script.run
+
+        .withSuccessHandler(
+          function(result) {
+
+            if (result.success) {
+
+              message.textContent =
+                '✓ ' +
+                points +
+                ' point(s) recorded.';
+
+              message.className =
+                'success';
+
+              scanButton.style.display =
+                'block';
+
+            } else {
+
+              message.textContent =
+                '✕ ' +
+                result.message;
+
+              message.className =
+                'error';
+
+            }
+
+
+            buttons.forEach(
+              function(button) {
+
+                button.disabled =
+                  false;
+
+              }
+            );
+
+          }
+        )
+
+
+        .withFailureHandler(
+          function(error) {
+
+            message.textContent =
+              '✕ Error: ' +
+              error.message;
+
+            message.className =
+              'error';
+
+
+            buttons.forEach(
+              function(button) {
+
+                button.disabled =
+                  false;
+
+              }
+            );
+
+          }
+        )
+
+
+        .recordScore(
+          cardData.cardCode,
+          points
+        );
+
+    }
+
+
+    // ==========================================
+    // QR SCANNER
+    // ==========================================
+
+    let html5QrCode = null;
+
+
+    function scanAnotherPlayer() {
+
+      const scannerSection =
+        document.getElementById(
+          'scannerSection'
+        );
+
+      const scoreSection =
+        document.getElementById(
+          'scoreSection'
+        );
+
+
+      scannerSection.style.display =
+        'block';
+
+      scoreSection.style.display =
+        'none';
+
+
+      html5QrCode =
+        new Html5Qrcode(
+          'reader'
+        );
+
+
+      const config = {
+
+        fps: 10,
+
+        qrbox: {
+
+          width: 250,
+
+          height: 250
+
+        }
+
+      };
+
+
+      html5QrCode.start(
+
+        {
+          facingMode: 'environment'
+        },
+
+        config,
+
+        function(decodedText) {
+
+          handleScannedQR(
+            decodedText
+          );
+
+        },
+
+        function(errorMessage) {
+
+          // Ignore normal scanning errors.
+
+        }
+
+      ).catch(function(error) {
+
+        document.getElementById(
+          'scannerMessage'
+        ).textContent =
+          'Unable to access camera: ' +
+          error;
+
+      });
+
+    }
+
+
+    // ==========================================
+    // HANDLE SCANNED QR
+    // ==========================================
+
+    function handleScannedQR(
+      decodedText
+    ) {
+
+      stopScanner();
+
+
+      document.getElementById(
+        'scannerMessage'
+      ).textContent =
+        'Loading player...';
+
+
+      try {
+
+        const url =
+          new URL(decodedText);
+
+
+        const card =
+          url.searchParams.get(
+            'card'
+          );
+
+
+        if (!card) {
+
+          alert(
+            'QR code ini bukan QR Student Game Card.'
+          );
+
+
+          reopenScanner();
+
+          return;
+
+        }
+
+
+        loadPlayerCard(
+          card
+        );
+
+
+      } catch (error) {
+
+        alert(
+          'QR code tidak valid.'
+        );
+
+
+        reopenScanner();
+
+      }
+
+    }
+
+
+    // ==========================================
+    // LOAD PLAYER CARD
+    // ==========================================
+
+    function loadPlayerCard(
+      cardCode
+    ) {
+
+      google.script.run
+
+        .withSuccessHandler(
+          function(result) {
+
+            if (!result.success) {
+
+              alert(
+                result.message
+              );
+
+              reopenScanner();
+
+              return;
+
+            }
+
+
+            // Update current card data
+
+            Object.assign(
+              cardData,
+              result.data
+            );
+
+
+            // Display new player
+
+            displayCard(
+              cardData
+            );
+
+
+            // Reset message
+
+            document.getElementById(
+              'recordMessage'
+            ).textContent =
+              '';
+
+
+            // Close scanner
+
+            document.getElementById(
+              'scannerSection'
+            ).style.display =
+              'none';
+
+
+            // Show player section
+
+            document.getElementById(
+              'scoreSection'
+            ).style.display =
+              'block';
+
+          }
+        )
+
+
+        .withFailureHandler(
+          function(error) {
+
+            alert(
+              'Error loading player: ' +
+              error.message
+            );
+
+            reopenScanner();
+
+          }
+        )
+
+
+        .getCardForScanner(
+          cardCode
+        );
+
+    }
+
+
+    // ==========================================
+    // STOP SCANNER
+    // ==========================================
+
+    function stopScanner() {
+
+      if (!html5QrCode) {
+
+        return;
+
+      }
+
+
+      html5QrCode
+        .stop()
+
+        .then(function() {
+
+          html5QrCode.clear();
+
+        })
+
+        .catch(function(error) {
+
+          console.log(
+            'Scanner stop error:',
+            error
+          );
+
+        });
+
+    }
+
+
+    // ==========================================
+    // REOPEN SCANNER
+    // ==========================================
+
+    function reopenScanner() {
+
+      document.getElementById(
+        'scannerSection'
+      ).style.display =
+        'block';
+
+
+      document.getElementById(
+        'scoreSection'
+      ).style.display =
+        'none';
+
+
+      scanAnotherPlayer();
+
+    }
+
+
+    // ==========================================
+    // CLOSE SCANNER
+    // ==========================================
+
+    function closeScanner() {
+
+      stopScanner();
+
+
+      document.getElementById(
+        'scannerSection'
+      ).style.display =
+        'none';
+
+
+      updateStatus(
+        cardData
+      );
+
+    }
+
+  </script>
+
+</body>
+
+</html>
