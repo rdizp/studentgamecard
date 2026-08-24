@@ -19,9 +19,11 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
-  <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
@@ -1015,6 +1017,13 @@
 </div>
 
 
+<!-- ==========================================
+     API
+=========================================== -->
+
+<script src="./js/api.js"></script>
+
+
 <script>
 
 
@@ -1031,76 +1040,76 @@ let selectedCard = null;
 // LOAD ACTIVE CARDS
 // ==================================================
 
-function loadActiveCards() {
+async function loadActiveCards() {
 
   showLoading();
 
 
-  google.script.run
+  try {
 
-    .withSuccessHandler(function(result) {
-
-      console.log(
-        'loadCardsForDeactivation result:',
-        result
+    const result =
+      await apiGet(
+        'deactivation-config'
       );
 
 
-      if (
-        !result ||
-        result.success !== true
-      ) {
-
-        showInitialError(
-          result &&
-          result.message
-            ? result.message
-            : 'Failed to load active cards.'
-        );
-
-        return;
-
-      }
+    console.log(
+      'loadCardsForDeactivation result:',
+      result
+    );
 
 
-      activeCards =
-        Array.isArray(result.data)
-          ? result.data
-          : [];
-
-
-      populateDropdown();
-
-
-      document
-        .getElementById('loadingScreen')
-        .style.display = 'none';
-
-
-      document
-        .getElementById('mainContent')
-        .style.display = 'block';
-
-    })
-
-    .withFailureHandler(function(error) {
-
-      console.error(
-        'loadCardsForDeactivation error:',
-        error
-      );
-
+    if (
+      !result ||
+      result.success !== true
+    ) {
 
       showInitialError(
-        error &&
-        error.message
-          ? error.message
-          : String(error)
+        result &&
+        result.message
+          ? result.message
+          : 'Failed to load active cards.'
       );
 
-    })
+      return;
 
-    .loadCardsForDeactivation();
+    }
+
+
+    activeCards =
+      Array.isArray(result.data)
+        ? result.data
+        : [];
+
+
+    populateDropdown();
+
+
+    document
+      .getElementById('loadingScreen')
+      .style.display = 'none';
+
+
+    document
+      .getElementById('mainContent')
+      .style.display = 'block';
+
+  } catch (error) {
+
+    console.error(
+      'loadCardsForDeactivation error:',
+      error
+    );
+
+
+    showInitialError(
+      error &&
+      error.message
+        ? error.message
+        : String(error)
+    );
+
+  }
 
 }
 
@@ -1321,7 +1330,7 @@ function cancelDeactivation() {
 // CONFIRM DEACTIVATION
 // ==================================================
 
-function confirmDeactivation() {
+async function confirmDeactivation() {
 
   if (!selectedCard) {
     return;
@@ -1349,123 +1358,37 @@ function confirmDeactivation() {
   );
 
 
-  google.script.run
+  try {
 
-    .withSuccessHandler(function(result) {
-
-      console.log(
-        'deactivateCard result:',
-        result
+    const result =
+      await apiPost(
+        'deactivate',
+        {
+          cardCode: cardCode
+        }
       );
 
 
-      setButtonLoading(false);
+    console.log(
+      'deactivateCard result:',
+      result
+    );
 
 
-      if (
-        !result ||
-        result.success !== true
-      ) {
-
-        showMessage(
-          result &&
-          result.message
-            ? result.message
-            : 'Deactivation failed.',
-          'error'
-        );
+    setButtonLoading(false);
 
 
-        document
-          .getElementById(
-            'deactivateButton'
-          )
-          .disabled =
-          false;
-
-
-        return;
-
-      }
-
-
-      const data =
-        result.data || {};
-
+    if (
+      !result ||
+      result.success !== true
+    ) {
 
       showMessage(
-
-        '<strong>Card deactivated successfully.</strong>' +
-        '<br><br>' +
-
-        'Card Code: ' +
-        (data.cardCode || cardCode) +
-
-        '<br>' +
-
-        'Student: ' +
-        (data.fullName ||
-         selectedCard.fullName ||
-         '-') +
-
-        (
-          data.duration
-            ? '<br>Duration: ' +
-              data.duration
-            : ''
-        ),
-
-        'success'
-
-      );
-
-
-      // Remove deactivated card
-      // from current active-card list
-
-      activeCards =
-        activeCards.filter(function(card) {
-
-          return (
-            String(card.cardCode) !==
-            String(cardCode)
-          );
-
-        });
-
-
-      selectedCard =
-        null;
-
-
-      resetAfterSuccess();
-
-    })
-
-    .withFailureHandler(function(error) {
-
-      console.error(
-        'deactivateCard error:',
-        error
-      );
-
-
-      setButtonLoading(false);
-
-
-      showMessage(
-
-        'Deactivation failed.<br><br>' +
-
-        (
-          error &&
-          error.message
-            ? error.message
-            : String(error)
-        ),
-
+        result &&
+        result.message
+          ? result.message
+          : 'Deactivation failed.',
         'error'
-
       );
 
 
@@ -1476,11 +1399,98 @@ function confirmDeactivation() {
         .disabled =
         false;
 
-    })
 
-    .deactivateCard(
-      cardCode
+      return;
+
+    }
+
+
+    const data =
+      result.data || {};
+
+
+    showMessage(
+
+      '<strong>Card deactivated successfully.</strong>' +
+      '<br><br>' +
+
+      'Card Code: ' +
+      (data.cardCode || cardCode) +
+
+      '<br>' +
+
+      'Student: ' +
+      (data.fullName ||
+       selectedCard.fullName ||
+       '-') +
+
+      (
+        data.duration
+          ? '<br>Duration: ' +
+            data.duration
+          : ''
+      ),
+
+      'success'
+
     );
+
+
+    // Remove deactivated card
+    // from current active-card list
+
+    activeCards =
+      activeCards.filter(function(card) {
+
+        return (
+          String(card.cardCode) !==
+          String(cardCode)
+        );
+
+      });
+
+
+    selectedCard =
+      null;
+
+
+    resetAfterSuccess();
+
+  } catch (error) {
+
+    console.error(
+      'deactivateCard error:',
+      error
+    );
+
+
+    setButtonLoading(false);
+
+
+    showMessage(
+
+      'Deactivation failed.<br><br>' +
+
+      (
+        error &&
+        error.message
+          ? error.message
+          : String(error)
+      ),
+
+      'error'
+
+    );
+
+
+    document
+      .getElementById(
+        'deactivateButton'
+      )
+      .disabled =
+      false;
+
+  }
 
 }
 
