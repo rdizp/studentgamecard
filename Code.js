@@ -68,6 +68,21 @@ function doGet(e) {
 
 }
 
+  // ==========================================
+  // DEACTIVATION CONFIG
+  // ==========================================
+
+  if (
+    action ===
+    'deactivation-config'
+  ) {
+
+    return jsonResponse(
+      getDeactivationConfig()
+    );
+
+  }
+
 
 // ==========================================
 // POST API
