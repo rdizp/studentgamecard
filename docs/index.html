@@ -1,120 +1,1515 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
 
   <title>Student Game Card</title>
 
-  <meta
-    http-equiv="Cache-Control"
-    content="no-cache, no-store, must-revalidate"
+  <!-- QR Scanner Library -->
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript"
+  ></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    rel="stylesheet"
   >
 
   <style>
+
+    :root {
+      --navy: #1E3A5F;
+      --mustard: #F4B400;
+      --off-white: #F8F9FA;
+      --gray: #D9D9D9;
+      --text: #18212F;
+      --muted: #697586;
+      --success-bg: #EAF7EE;
+      --success-text: #176B35;
+      --error-bg: #FDECEC;
+      --error-text: #A32121;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
+      padding:
+        20px
+        16px
+        max(20px, env(safe-area-inset-bottom));
+
+      background: var(--off-white);
+      color: var(--text);
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif;
+    }
+
+    .app-card {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+
+      background: #ffffff;
+
+      border: 1px solid var(--gray);
+      border-radius: 24px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 10px 35px rgba(30, 58, 95, 0.10);
+    }
+
+    .app-header {
+      padding: 24px 22px 22px;
+
+      background: var(--navy);
+      color: white;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-header::after {
+      content: "";
+
+      position: absolute;
+
+      width: 130px;
+      height: 130px;
+
+      border-radius: 50%;
+
+      background: rgba(244, 180, 0, 0.15);
+
+      right: -45px;
+      top: -55px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-dot {
+      width: 11px;
+      height: 11px;
+
+      border-radius: 50%;
+
+      background: var(--mustard);
+
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 12px;
+      font-weight: 700;
+
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+
+      opacity: 0.9;
+    }
+
+    .app-header h1 {
+      margin: 18px 0 5px;
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 25px;
+      line-height: 1.2;
+      font-weight: 800;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .app-header p {
+      margin: 0;
+
+      font-size: 13px;
+      line-height: 1.5;
+
+      color: rgba(255,255,255,0.78);
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      padding: 22px;
+    }
+
+    .card-code-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 12px;
+
+      padding: 14px 15px;
+
+      background: #F4F7FA;
+      border: 1px solid #E2E7ED;
+
+      border-radius: 14px;
+
+      margin-bottom: 22px;
+    }
+
+    .card-code-label {
+      font-size: 11px;
+      font-weight: 700;
+
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+
+      color: var(--muted);
+    }
+
+    .card-code-value {
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 16px;
+      font-weight: 800;
+
+      color: var(--navy);
+
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+
+      gap: 15px;
+    }
+
+    .info-item {
+      display: grid;
+
+      grid-template-columns: 1fr;
+
+      gap: 4px;
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+
+      color: var(--muted);
+
+      text-transform: uppercase;
+      letter-spacing: 0.055em;
+    }
+
+    .value {
+      font-size: 16px;
+      line-height: 1.4;
+      font-weight: 600;
+
+      color: var(--text);
+
+      word-break: break-word;
+    }
+
+    .status {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #F8F9FA;
-      color: #1E3A5F;
-      font-family: Arial, Helvetica, sans-serif;
+
+      gap: 8px;
+
+      margin-top: 22px;
+      padding: 13px 15px;
+
+      border-radius: 13px;
+
+      font-size: 13px;
+      font-weight: 800;
+
+      letter-spacing: 0.03em;
+
       text-align: center;
     }
 
-    .message {
-      padding: 24px;
+    .status.active {
+      background: var(--success-bg);
+      color: var(--success-text);
     }
 
-    .loader {
-      width: 28px;
-      height: 28px;
-      margin: 0 auto 16px;
-      border: 3px solid #D9D9D9;
-      border-top-color: #F4B400;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    .status.inactive {
+      background: var(--error-bg);
+      color: var(--error-text);
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+    #scoreSection {
+      margin-top: 28px;
+      padding-top: 24px;
+
+      border-top: 1px solid #ECEFF2;
+    }
+
+    .section-heading {
+      margin-bottom: 14px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 19px;
+      font-weight: 800;
+
+      color: var(--navy);
+    }
+
+    .section-heading p {
+      margin: 4px 0 0;
+
+      font-size: 12px;
+
+      color: var(--muted);
+    }
+
+    .score-buttons {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 10px;
+    }
+
+    .score-buttons button {
+      min-height: 58px;
+
+      border: 1px solid #DCE2E8;
+      border-radius: 15px;
+
+      background: white;
+      color: var(--navy);
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 18px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 3px 8px rgba(30,58,95,0.06);
+
+      transition:
+        transform 0.12s ease,
+        background 0.12s ease,
+        border-color 0.12s ease;
+    }
+
+    .score-buttons button:hover {
+      background: #FFF8E5;
+      border-color: var(--mustard);
+    }
+
+    .score-buttons button:active {
+      transform: scale(0.96);
+
+      background: var(--mustard);
+      border-color: var(--mustard);
+
+      color: var(--navy);
+    }
+
+    .score-buttons button:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
+    #recordMessage {
+      min-height: 22px;
+
+      margin-top: 13px;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      text-align: center;
+    }
+
+    .success {
+      color: var(--success-text);
+    }
+
+    .error {
+      color: var(--error-text);
+    }
+
+    #scanAnotherButton {
+      width: 100%;
+
+      margin-top: 13px;
+      padding: 14px;
+
+      border: none;
+      border-radius: 13px;
+
+      background: var(--mustard);
+      color: var(--navy);
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+      font-size: 14px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 14px rgba(244,180,0,0.22);
+
+      transition:
+        transform 0.12s ease;
+    }
+
+    #scanAnotherButton:active {
+      transform: scale(0.98);
+    }
+
+    #scannerSection {
+      margin-top: 24px;
+      padding-top: 24px;
+
+      border-top: 1px solid #ECEFF2;
+    }
+
+    #scannerTitle {
+      margin: 0 0 14px;
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 18px;
+      font-weight: 800;
+
+      color: var(--navy);
+
+      text-align: center;
+    }
+
+    #reader {
+      width: 100%;
+
+      overflow: hidden;
+
+      border: 1px solid var(--gray);
+      border-radius: 16px;
+
+      background: #111;
+    }
+
+    #reader video {
+      border-radius: 15px;
+    }
+
+    #reader button {
+      border: none !important;
+      border-radius: 9px !important;
+
+      padding: 9px 13px !important;
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif !important;
+
+      font-weight: 700 !important;
+    }
+
+    #scannerMessage {
+      margin-top: 11px;
+
+      font-size: 12px;
+      line-height: 1.5;
+
+      color: var(--muted);
+
+      text-align: center;
+    }
+
+    #closeScannerButton {
+      width: 100%;
+
+      margin-top: 13px;
+      padding: 13px;
+
+      border: 1px solid var(--gray);
+      border-radius: 12px;
+
+      background: white;
+      color: var(--navy);
+
+      font-size: 13px;
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    #closeScannerButton:active {
+      background: #F1F3F5;
+    }
+
+    @media (min-width: 480px) {
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+
+      .content {
+        padding: 25px;
       }
     }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 20px;
+    @media (max-width: 360px) {
+      body {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .app-header {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .content {
+        padding: 18px;
+      }
+
+      .app-header h1 {
+        font-size: 22px;
+      }
+
+      .value {
+        font-size: 15px;
+      }
     }
 
-    p {
-      margin: 0;
-      color: #666;
-      font-size: 14px;
-    }
   </style>
+
 </head>
+
 
 <body>
 
-  <div class="message">
+  <div class="app-card">
 
-    <div class="loader"></div>
+    <header class="app-header">
 
-    <h1>Opening your game card...</h1>
+      <div class="brand-row">
 
-    <p>Please wait.</p>
+        <span class="brand-dot"></span>
+
+        <span class="brand-name">
+          Student Game Card
+        </span>
+
+      </div>
+
+      <h1>
+        Player Card
+      </h1>
+
+      <p>
+        Scan, verify, and record game points.
+      </p>
+
+    </header>
+
+
+    <main class="content">
+
+      <div class="card-code-box">
+
+        <div class="card-code-label">
+          Card Code
+        </div>
+
+        <div
+          class="card-code-value"
+          id="cardCode"
+        >
+          -
+        </div>
+
+      </div>
+
+
+      <div class="info-section">
+
+        <div class="info-item">
+
+          <div class="label">
+            Full Name
+          </div>
+
+          <div
+            class="value"
+            id="fullName"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div class="info-item">
+
+          <div class="label">
+            NIM
+          </div>
+
+          <div
+            class="value"
+            id="nim"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div class="info-item">
+
+          <div class="label">
+            Enrolled Practical Course
+          </div>
+
+          <div
+            class="value"
+            id="course"
+          >
+            -
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="status"
+        class="status"
+      >
+        Loading...
+      </div>
+
+
+      <div
+        id="scoreSection"
+        style="display: none;"
+      >
+
+        <div class="section-heading">
+
+          <h2>
+            Record Points
+          </h2>
+
+          <p>
+            Tap the points earned by the player.
+          </p>
+
+        </div>
+
+
+        <div class="score-buttons">
+
+          <button onclick="recordScore(1)">
+            +1
+          </button>
+
+          <button onclick="recordScore(2)">
+            +2
+          </button>
+
+          <button onclick="recordScore(3)">
+            +3
+          </button>
+
+          <button onclick="recordScore(5)">
+            +5
+          </button>
+
+        </div>
+
+
+        <div id="recordMessage"></div>
+
+
+        <button
+          id="scanAnotherButton"
+          onclick="scanAnotherPlayer()"
+          style="display: none;"
+        >
+          📷 Scan Another Player
+        </button>
+
+      </div>
+
+
+      <div
+        id="scannerSection"
+        style="display: none;"
+      >
+
+        <h3 id="scannerTitle">
+          Scan Another Player
+        </h3>
+
+
+        <div id="reader"></div>
+
+
+        <div id="scannerMessage">
+          Point the camera at the player's QR code.
+        </div>
+
+
+        <button
+          id="closeScannerButton"
+          onclick="closeScanner()"
+        >
+          Close Scanner
+        </button>
+
+      </div>
+
+    </main>
 
   </div>
 
 
   <script>
 
-    const APP_SCRIPT_URL =
+    // ==================================================
+    // API CONFIG
+    // ==================================================
+
+    const API_URL =
       'https://script.google.com/macros/s/AKfycbwqDppJc8kVL4tkjlibwLTbU4wtb030Q3AyEgr6g82rMT9ld1AWILgdsYdQneeOy8Wlxg/exec';
 
 
-    const params =
-      new URLSearchParams(
-        window.location.search
+    // ==================================================
+    // CARD DATA
+    // ==================================================
+
+    let cardData = {
+      cardCode: '',
+      fullName: '',
+      nim: '',
+      course: '',
+      status: ''
+    };
+
+
+    // ==================================================
+    // API HELPER
+    // ==================================================
+
+    async function apiGet(action, params = {}) {
+
+      const url =
+        new URL(API_URL);
+
+      url.searchParams.set(
+        'action',
+        action
       );
 
+      Object.entries(params)
+        .forEach(function ([key, value]) {
 
-    const cardCode =
-      params.get('card');
+          url.searchParams.set(
+            key,
+            value
+          );
+
+        });
 
 
-    if (!cardCode) {
-
-      document
-        .querySelector('.message')
-        .innerHTML =
-
-        '<h1>Invalid Card QR</h1>' +
-        '<p>No card code was provided.</p>';
-
-    } else {
-
-      const destination =
-        APP_SCRIPT_URL +
-        '?card=' +
-        encodeURIComponent(
-          cardCode
+      const response =
+        await fetch(
+          url.toString(),
+          {
+            method: 'GET'
+          }
         );
 
 
-      window.location.replace(
-        destination
+      if (!response.ok) {
+
+        throw new Error(
+          'HTTP ' + response.status
+        );
+
+      }
+
+
+      return await response.json();
+
+    }
+
+
+    async function apiPost(action, data = {}) {
+
+      const response =
+        await fetch(
+          API_URL,
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'text/plain;charset=utf-8'
+            },
+
+            body:
+              JSON.stringify({
+                action,
+                ...data
+              })
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          'HTTP ' + response.status
+        );
+
+      }
+
+
+      return await response.json();
+
+    }
+
+
+    // ==================================================
+    // DISPLAY CARD
+    // ==================================================
+
+    function displayCard(data) {
+
+      document.getElementById(
+        'cardCode'
+      ).textContent =
+        data.cardCode || '-';
+
+
+      document.getElementById(
+        'fullName'
+      ).textContent =
+        data.fullName || '-';
+
+
+      document.getElementById(
+        'nim'
+      ).textContent =
+        data.nim || '-';
+
+
+      document.getElementById(
+        'course'
+      ).textContent =
+        data.course || '-';
+
+
+      updateStatus(data);
+
+    }
+
+
+    // ==================================================
+    // UPDATE STATUS
+    // ==================================================
+
+    function updateStatus(data) {
+
+      const statusElement =
+        document.getElementById(
+          'status'
+        );
+
+
+      const scoreSection =
+        document.getElementById(
+          'scoreSection'
+        );
+
+
+      const isActive =
+        String(data.status)
+          .trim()
+          .toLowerCase() ===
+        'active';
+
+
+      statusElement.className =
+        'status';
+
+
+      if (isActive) {
+
+        statusElement.textContent =
+          '🟢 ACTIVE';
+
+
+        statusElement.classList.add(
+          'active'
+        );
+
+
+        scoreSection.style.display =
+          'block';
+
+      } else {
+
+        statusElement.textContent =
+          '🔴 CARD NOT ACTIVE';
+
+
+        statusElement.classList.add(
+          'inactive'
+        );
+
+
+        scoreSection.style.display =
+          'none';
+
+      }
+
+    }
+
+
+    // ==================================================
+    // LOAD PLAYER CARD
+    // ==================================================
+
+    async function loadPlayerCard(cardCode) {
+
+      try {
+
+        const result =
+          await apiGet(
+            'card',
+            {
+              card: cardCode
+            }
+          );
+
+
+        if (!result.success) {
+
+          showError(
+            result.message ||
+            'Unable to load player card.'
+          );
+
+          return false;
+
+        }
+
+
+        cardData =
+          result.data;
+
+
+        displayCard(
+          cardData
+        );
+
+
+        return true;
+
+      } catch (error) {
+
+        console.error(
+          'LOAD CARD ERROR:',
+          error
+        );
+
+
+        showError(
+          'Error loading player: ' +
+          error.message
+        );
+
+
+        return false;
+
+      }
+
+    }
+
+
+    // ==================================================
+    // INITIAL LOAD
+    // ==================================================
+
+    async function initialize() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+
+      const cardCode =
+        params.get('card');
+
+
+      if (!cardCode) {
+
+        showError(
+          'No card code was provided.'
+        );
+
+        return;
+
+      }
+
+
+      await loadPlayerCard(
+        cardCode
       );
 
     }
 
+
+    // ==================================================
+    // RECORD SCORE
+    // ==================================================
+
+    async function recordScore(points) {
+
+      const buttons =
+        document.querySelectorAll(
+          '.score-buttons button'
+        );
+
+
+      const message =
+        document.getElementById(
+          'recordMessage'
+        );
+
+
+      const scanButton =
+        document.getElementById(
+          'scanAnotherButton'
+        );
+
+
+      buttons.forEach(
+        function(button) {
+          button.disabled = true;
+        }
+      );
+
+
+      scanButton.style.display =
+        'none';
+
+
+      message.textContent =
+        'Recording...';
+
+
+      message.className =
+        '';
+
+
+      try {
+
+        const result =
+          await apiPost(
+            'record-score',
+            {
+              cardCode:
+                cardData.cardCode,
+
+              points:
+                points
+            }
+          );
+
+
+        if (result.success) {
+
+          message.textContent =
+            '✓ ' +
+            points +
+            ' point(s) recorded.';
+
+
+          message.className =
+            'success';
+
+
+          scanButton.style.display =
+            'block';
+
+        } else {
+
+          message.textContent =
+            '✕ ' +
+            (
+              result.message ||
+              'Failed to record score.'
+            );
+
+
+          message.className =
+            'error';
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          'RECORD SCORE ERROR:',
+          error
+        );
+
+
+        message.textContent =
+          '✕ Error: ' +
+          error.message;
+
+
+        message.className =
+          'error';
+
+      }
+
+
+      buttons.forEach(
+        function(button) {
+          button.disabled = false;
+        }
+      );
+
+    }
+
+
+    // ==================================================
+    // QR SCANNER
+    // ==================================================
+
+    let html5QrCode = null;
+
+
+    async function scanAnotherPlayer() {
+
+      const scannerSection =
+        document.getElementById(
+          'scannerSection'
+        );
+
+
+      const scoreSection =
+        document.getElementById(
+          'scoreSection'
+        );
+
+
+      scannerSection.style.display =
+        'block';
+
+
+      scoreSection.style.display =
+        'none';
+
+
+      document.getElementById(
+        'scannerMessage'
+      ).textContent =
+        'Point the camera at the player\'s QR code.';
+
+
+      if (html5QrCode) {
+
+        try {
+
+          await html5QrCode.stop();
+
+        } catch (error) {
+
+          console.log(
+            'Previous scanner stop:',
+            error
+          );
+
+        }
+
+        try {
+
+          html5QrCode.clear();
+
+        } catch (error) {
+
+          console.log(
+            'Previous scanner clear:',
+            error
+          );
+
+        }
+
+      }
+
+
+      html5QrCode =
+        new Html5Qrcode(
+          'reader'
+        );
+
+
+      const config = {
+
+        fps: 10,
+
+        qrbox: {
+          width: 250,
+          height: 250
+        }
+
+      };
+
+
+      try {
+
+        await html5QrCode.start(
+
+          {
+            facingMode: {
+              ideal: 'environment'
+            }
+          },
+
+          config,
+
+          function(decodedText) {
+
+            handleScannedQR(
+              decodedText
+            );
+
+          },
+
+          function(errorMessage) {
+
+            // Normal QR detection misses.
+            // Do not display these.
+
+          }
+
+        );
+
+      } catch (error) {
+
+        console.error(
+          'QR CAMERA DETECTION ERROR:',
+          error
+        );
+
+
+        document.getElementById(
+          'scannerMessage'
+        ).textContent =
+          'Unable to access camera: ' +
+          (
+            error.message ||
+            error
+          );
+
+      }
+
+    }
+
+
+    // ==================================================
+    // HANDLE SCANNED QR
+    // ==================================================
+
+    function handleScannedQR(decodedText) {
+
+      stopScanner();
+
+
+      document.getElementById(
+        'scannerMessage'
+      ).textContent =
+        'Loading player...';
+
+
+      try {
+
+        const url =
+          new URL(decodedText);
+
+
+        const card =
+          url.searchParams.get(
+            'card'
+          );
+
+
+        if (!card) {
+
+          alert(
+            'QR code ini bukan QR Student Game Card.'
+          );
+
+
+          reopenScanner();
+
+          return;
+
+        }
+
+
+        loadScannedPlayer(
+          card
+        );
+
+      } catch (error) {
+
+        console.error(
+          'QR PARSE ERROR:',
+          error
+        );
+
+
+        alert(
+          'QR code tidak valid.'
+        );
+
+
+        reopenScanner();
+
+      }
+
+    }
+
+
+    // ==================================================
+    // LOAD PLAYER FROM SCANNED QR
+    // ==================================================
+
+    async function loadScannedPlayer(cardCode) {
+
+      const success =
+        await loadPlayerCard(
+          cardCode
+        );
+
+
+      if (!success) {
+
+        reopenScanner();
+
+        return;
+
+      }
+
+
+      document.getElementById(
+        'recordMessage'
+      ).textContent =
+        '';
+
+
+      document.getElementById(
+        'scannerSection'
+      ).style.display =
+        'none';
+
+
+      document.getElementById(
+        'scoreSection'
+      ).style.display =
+        'block';
+
+    }
+
+
+    // ==================================================
+    // STOP SCANNER
+    // ==================================================
+
+    async function stopScanner() {
+
+      if (!html5QrCode) {
+        return;
+      }
+
+
+      try {
+
+        await html5QrCode.stop();
+
+      } catch (error) {
+
+        console.log(
+          'Scanner stop error:',
+          error
+        );
+
+      }
+
+
+      try {
+
+        html5QrCode.clear();
+
+      } catch (error) {
+
+        console.log(
+          'Scanner clear error:',
+          error
+        );
+
+      }
+
+
+      html5QrCode =
+        null;
+
+    }
+
+
+    // ==================================================
+    // REOPEN SCANNER
+    // ==================================================
+
+    function reopenScanner() {
+
+      document.getElementById(
+        'scannerSection'
+      ).style.display =
+        'block';
+
+
+      document.getElementById(
+        'scoreSection'
+      ).style.display =
+        'none';
+
+
+      scanAnotherPlayer();
+
+    }
+
+
+    // ==================================================
+    // CLOSE SCANNER
+    // ==================================================
+
+    async function closeScanner() {
+
+      await stopScanner();
+
+
+      document.getElementById(
+        'scannerSection'
+      ).style.display =
+        'none';
+
+
+      updateStatus(
+        cardData
+      );
+
+    }
+
+
+    // ==================================================
+    // ERROR DISPLAY
+    // ==================================================
+
+    function showError(message) {
+
+      const status =
+        document.getElementById(
+          'status'
+        );
+
+
+      status.className =
+        'status inactive';
+
+
+      status.textContent =
+        '🔴 ' + message;
+
+    }
+
+
+    // ==================================================
+    // START
+    // ==================================================
+
+    initialize();
+
   </script>
 
 </body>
+
 </html>
