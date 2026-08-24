@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-  <base target="_top">
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
+
+  <title>Student Game Card</title>
 
   <!-- QR Scanner Library -->
   <script
@@ -15,9 +18,17 @@
     type="text/javascript"
   ></script>
 
+  <!-- API Client -->
+  <script src="./js/api.js"></script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
     rel="stylesheet"
@@ -662,14 +673,11 @@
     }
 
 
-    /*
-      html5-qrcode injects its own UI.
-      Keep it contained and readable.
-    */
-
     #reader video {
 
       border-radius: 15px;
+
+      width: 100% !important;
 
     }
 
@@ -814,10 +822,7 @@
 
   <div class="app-card">
 
-
-    <!-- ======================================
-         HEADER
-         ====================================== -->
+    <!-- HEADER -->
 
     <header class="app-header">
 
@@ -844,12 +849,9 @@
     </header>
 
 
-    <!-- ======================================
-         CONTENT
-         ====================================== -->
+    <!-- CONTENT -->
 
     <main class="content">
-
 
       <!-- CARD CODE -->
 
@@ -872,7 +874,6 @@
       <!-- CARD INFORMATION -->
 
       <div class="info-section">
-
 
         <div class="info-item">
 
@@ -934,15 +935,12 @@
       </div>
 
 
-      <!-- ====================================
-           SCORE SECTION
-           ==================================== -->
+      <!-- SCORE SECTION -->
 
       <div
         id="scoreSection"
         style="display: none;"
       >
-
 
         <div class="section-heading">
 
@@ -960,24 +958,28 @@
         <div class="score-buttons">
 
           <button
+            type="button"
             onclick="recordScore(1)"
           >
             +1
           </button>
 
           <button
+            type="button"
             onclick="recordScore(2)"
           >
             +2
           </button>
 
           <button
+            type="button"
             onclick="recordScore(3)"
           >
             +3
           </button>
 
           <button
+            type="button"
             onclick="recordScore(5)"
           >
             +5
@@ -993,6 +995,7 @@
 
         <button
           id="scanAnotherButton"
+          type="button"
           onclick="scanAnotherPlayer()"
           style="display: none;"
         >
@@ -1002,9 +1005,7 @@
       </div>
 
 
-      <!-- ====================================
-           SCANNER SECTION
-           ==================================== -->
+      <!-- SCANNER SECTION -->
 
       <div
         id="scannerSection"
@@ -1026,13 +1027,13 @@
 
         <button
           id="closeScannerButton"
+          type="button"
           onclick="closeScanner()"
         >
           Close Scanner
         </button>
 
       </div>
-
 
     </main>
 
@@ -1041,13 +1042,23 @@
 
   <script>
 
-
     // ==========================================
     // CARD DATA
     // ==========================================
 
-    const cardData =
-      <?!= JSON.stringify(cardData) ?>;
+    let cardData = {
+
+      cardCode: '',
+
+      fullName: '',
+
+      nim: '',
+
+      course: '',
+
+      status: ''
+
+    };
 
 
     // ==========================================
@@ -1056,17 +1067,29 @@
 
     function displayCard(data) {
 
-      document.getElementById('cardCode').textContent =
+      document.getElementById(
+        'cardCode'
+      ).textContent =
         data.cardCode || '-';
 
-      document.getElementById('fullName').textContent =
+
+      document.getElementById(
+        'fullName'
+      ).textContent =
         data.fullName || '-';
 
-      document.getElementById('nim').textContent =
+
+      document.getElementById(
+        'nim'
+      ).textContent =
         data.nim || '-';
 
-      document.getElementById('course').textContent =
+
+      document.getElementById(
+        'course'
+      ).textContent =
         data.course || '-';
+
 
       updateStatus(data);
 
@@ -1080,16 +1103,22 @@
     function updateStatus(data) {
 
       const statusElement =
-        document.getElementById('status');
+        document.getElementById(
+          'status'
+        );
+
 
       const scoreSection =
-        document.getElementById('scoreSection');
+        document.getElementById(
+          'scoreSection'
+        );
 
 
       const isActive =
-        String(data.status)
+        String(data.status || '')
           .trim()
-          .toLowerCase() === 'active';
+          .toLowerCase() ===
+        'active';
 
 
       statusElement.className =
@@ -1126,27 +1155,116 @@
 
 
     // ==========================================
-    // INITIAL DISPLAY
+    // LOAD INITIAL PLAYER
     // ==========================================
 
-    displayCard(cardData);
+    async function loadInitialCard() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+
+      const cardCode =
+        params.get('card');
+
+
+      if (!cardCode) {
+
+        document.getElementById(
+          'status'
+        ).textContent =
+          'No Card Code';
+
+        document.getElementById(
+          'status'
+        ).className =
+          'status inactive';
+
+        return;
+
+      }
+
+
+      try {
+
+        const result =
+          await apiGet(
+            'card',
+            {
+              card: cardCode
+            }
+          );
+
+
+        if (!result.success) {
+
+          document.getElementById(
+            'status'
+          ).textContent =
+            result.message ||
+            'Card not found';
+
+          document.getElementById(
+            'status'
+          ).className =
+            'status inactive';
+
+          return;
+
+        }
+
+
+        cardData =
+          result.data;
+
+
+        displayCard(
+          cardData
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          'Initial card load error:',
+          error
+        );
+
+
+        document.getElementById(
+          'status'
+        ).textContent =
+          'Unable to load player card.';
+
+        document.getElementById(
+          'status'
+        ).className =
+          'status inactive';
+
+      }
+
+    }
 
 
     // ==========================================
     // RECORD SCORE
     // ==========================================
 
-    function recordScore(points) {
+    async function recordScore(points) {
 
       const buttons =
         document.querySelectorAll(
           '.score-buttons button'
         );
 
+
       const message =
         document.getElementById(
           'recordMessage'
         );
+
 
       const scanButton =
         document.getElementById(
@@ -1154,11 +1272,14 @@
         );
 
 
-      buttons.forEach(function(button) {
+      buttons.forEach(
+        function(button) {
 
-        button.disabled = true;
+          button.disabled =
+            true;
 
-      });
+        }
+      );
 
 
       scanButton.style.display =
@@ -1171,77 +1292,75 @@
       message.className = '';
 
 
-      google.script.run
+      try {
 
-        .withSuccessHandler(
-          function(result) {
+        const result =
+          await apiPost(
+            'record-score',
+            {
+              cardCode:
+                cardData.cardCode,
 
-            if (result.success) {
-
-              message.textContent =
-                '✓ ' +
-                points +
-                ' point(s) recorded.';
-
-              message.className =
-                'success';
-
-              scanButton.style.display =
-                'block';
-
-            } else {
-
-              message.textContent =
-                '✕ ' +
-                result.message;
-
-              message.className =
-                'error';
-
+              points:
+                points
             }
+          );
 
 
-            buttons.forEach(
-              function(button) {
+        if (result.success) {
 
-                button.disabled =
-                  false;
+          message.textContent =
+            '✓ ' +
+            points +
+            ' point(s) recorded.';
 
-              }
+          message.className =
+            'success';
+
+          scanButton.style.display =
+            'block';
+
+        } else {
+
+          message.textContent =
+            '✕ ' +
+            (
+              result.message ||
+              'Unable to record score.'
             );
 
-          }
-        )
+          message.className =
+            'error';
+
+        }
 
 
-        .withFailureHandler(
-          function(error) {
+      } catch (error) {
 
-            message.textContent =
-              '✕ Error: ' +
-              error.message;
-
-            message.className =
-              'error';
-
-
-            buttons.forEach(
-              function(button) {
-
-                button.disabled =
-                  false;
-
-              }
-            );
-
-          }
-        )
-
-
-        .recordScore(
-          cardData.cardCode,
-          points
+        console.error(
+          'Record score error:',
+          error
         );
+
+
+        message.textContent =
+          '✕ Error: ' +
+          error.message;
+
+        message.className =
+          'error';
+
+      }
+
+
+      buttons.forEach(
+        function(button) {
+
+          button.disabled =
+            false;
+
+        }
+      );
 
     }
 
@@ -1253,12 +1372,13 @@
     let html5QrCode = null;
 
 
-    function scanAnotherPlayer() {
+    async function scanAnotherPlayer() {
 
       const scannerSection =
         document.getElementById(
           'scannerSection'
         );
+
 
       const scoreSection =
         document.getElementById(
@@ -1269,8 +1389,24 @@
       scannerSection.style.display =
         'block';
 
+
       scoreSection.style.display =
         'none';
+
+
+      const reader =
+        document.getElementById(
+          'reader'
+        );
+
+
+      reader.innerHTML = '';
+
+
+      document.getElementById(
+        'scannerMessage'
+      ).textContent =
+        'Requesting camera access...';
 
 
       html5QrCode =
@@ -1294,37 +1430,59 @@
       };
 
 
-      html5QrCode.start(
+      try {
 
-        {
-          facingMode: 'environment'
-        },
+        await html5QrCode.start(
 
-        config,
+          {
+            facingMode: {
+              ideal: 'environment'
+            }
+          },
 
-        function(decodedText) {
+          config,
 
-          handleScannedQR(
-            decodedText
-          );
+          function(decodedText) {
 
-        },
+            handleScannedQR(
+              decodedText
+            );
 
-        function(errorMessage) {
+          },
 
-          // Ignore normal scanning errors.
+          function(errorMessage) {
 
-        }
+            // Normal QR scanning misses are ignored.
 
-      ).catch(function(error) {
+          }
+
+        );
+
+
+        document.getElementById(
+          'scannerMessage'
+        ).textContent =
+          "Point the camera at the player's QR code.";
+
+
+      } catch (error) {
+
+        console.error(
+          'QR CAMERA DETECTION ERROR:',
+          error
+        );
+
 
         document.getElementById(
           'scannerMessage'
         ).textContent =
           'Unable to access camera: ' +
-          error;
+          (
+            error.message ||
+            error
+          );
 
-      });
+      }
 
     }
 
@@ -1349,7 +1507,9 @@
       try {
 
         const url =
-          new URL(decodedText);
+          new URL(
+            decodedText
+          );
 
 
         const card =
@@ -1379,6 +1539,12 @@
 
       } catch (error) {
 
+        console.error(
+          'Invalid QR:',
+          error
+        );
+
+
         alert(
           'QR code tidak valid.'
         );
@@ -1392,90 +1558,83 @@
 
 
     // ==========================================
-    // LOAD PLAYER CARD
+    // LOAD PLAYER FROM SCANNED QR
     // ==========================================
 
-    function loadPlayerCard(
+    async function loadPlayerCard(
       cardCode
     ) {
 
-      google.script.run
+      try {
 
-        .withSuccessHandler(
-          function(result) {
-
-            if (!result.success) {
-
-              alert(
-                result.message
-              );
-
-              reopenScanner();
-
-              return;
-
+        const result =
+          await apiGet(
+            'card',
+            {
+              card: cardCode
             }
+          );
 
 
-            // Update current card data
+        if (!result.success) {
 
-            Object.assign(
-              cardData,
-              result.data
-            );
-
-
-            // Display new player
-
-            displayCard(
-              cardData
-            );
+          alert(
+            result.message ||
+            'Player card not found.'
+          );
 
 
-            // Reset message
+          reopenScanner();
 
-            document.getElementById(
-              'recordMessage'
-            ).textContent =
-              '';
+          return;
 
-
-            // Close scanner
-
-            document.getElementById(
-              'scannerSection'
-            ).style.display =
-              'none';
+        }
 
 
-            // Show player section
-
-            document.getElementById(
-              'scoreSection'
-            ).style.display =
-              'block';
-
-          }
-        )
+        cardData =
+          result.data;
 
 
-        .withFailureHandler(
-          function(error) {
-
-            alert(
-              'Error loading player: ' +
-              error.message
-            );
-
-            reopenScanner();
-
-          }
-        )
-
-
-        .getCardForScanner(
-          cardCode
+        displayCard(
+          cardData
         );
+
+
+        document.getElementById(
+          'recordMessage'
+        ).textContent =
+          '';
+
+
+        document.getElementById(
+          'scannerSection'
+        ).style.display =
+          'none';
+
+
+        document.getElementById(
+          'scoreSection'
+        ).style.display =
+          'block';
+
+
+      } catch (error) {
+
+        console.error(
+          'Load player error:',
+          error
+        );
+
+
+        alert(
+          'Error loading player: ' +
+          error.message
+        );
+
+
+        reopenScanner();
+
+      }
 
     }
 
@@ -1484,7 +1643,7 @@
     // STOP SCANNER
     // ==========================================
 
-    function stopScanner() {
+    async function stopScanner() {
 
       if (!html5QrCode) {
 
@@ -1493,23 +1652,36 @@
       }
 
 
-      html5QrCode
-        .stop()
+      try {
 
-        .then(function() {
+        await html5QrCode.stop();
 
-          html5QrCode.clear();
+      } catch (error) {
 
-        })
+        console.log(
+          'Scanner stop error:',
+          error
+        );
 
-        .catch(function(error) {
+      }
 
-          console.log(
-            'Scanner stop error:',
-            error
-          );
 
-        });
+      try {
+
+        html5QrCode.clear();
+
+      } catch (error) {
+
+        console.log(
+          'Scanner clear error:',
+          error
+        );
+
+      }
+
+
+      html5QrCode =
+        null;
 
     }
 
@@ -1541,9 +1713,9 @@
     // CLOSE SCANNER
     // ==========================================
 
-    function closeScanner() {
+    async function closeScanner() {
 
-      stopScanner();
+      await stopScanner();
 
 
       document.getElementById(
@@ -1557,6 +1729,13 @@
       );
 
     }
+
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+
+    loadInitialCard();
 
   </script>
 
