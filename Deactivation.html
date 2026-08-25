@@ -33,10 +33,6 @@
 
   <style>
 
-    /* ==========================================
-       RESET
-    =========================================== */
-
     * {
       box-sizing: border-box;
     }
@@ -142,8 +138,6 @@
 
     }
 
-
-    /* Decorative top bar */
 
     .card::before {
 
@@ -426,8 +420,6 @@
 
     }
 
-
-    /* Status */
 
     #status {
 
@@ -812,9 +804,9 @@
     </div>
 
 
-    <!-- ============================== -->
-    <!-- LOADING -->
-    <!-- ============================== -->
+    <!-- ==========================================
+         LOADING
+    =========================================== -->
 
     <div
       id="loadingScreen"
@@ -828,9 +820,9 @@
     </div>
 
 
-    <!-- ============================== -->
-    <!-- MAIN -->
-    <!-- ============================== -->
+    <!-- ==========================================
+         MAIN
+    =========================================== -->
 
     <div
       id="mainContent"
@@ -860,9 +852,9 @@
       </div>
 
 
-      <!-- ============================== -->
-      <!-- CARD DETAILS -->
-      <!-- ============================== -->
+      <!-- ==========================================
+           CARD DETAILS
+      =========================================== -->
 
       <div
         id="details"
@@ -935,9 +927,9 @@
       </div>
 
 
-      <!-- ============================== -->
-      <!-- DEACTIVATE -->
-      <!-- ============================== -->
+      <!-- ==========================================
+           DEACTIVATE
+      =========================================== -->
 
       <button
         id="deactivateButton"
@@ -962,9 +954,9 @@
       </button>
 
 
-      <!-- ============================== -->
-      <!-- CONFIRMATION -->
-      <!-- ============================== -->
+      <!-- ==========================================
+           CONFIRMATION
+      =========================================== -->
 
       <div
         id="confirmation"
@@ -1001,9 +993,9 @@
       </div>
 
 
-      <!-- ============================== -->
-      <!-- MESSAGE -->
-      <!-- ============================== -->
+      <!-- ==========================================
+           MESSAGE
+      =========================================== -->
 
       <div
         id="message"
@@ -1158,11 +1150,15 @@ function populateDropdown() {
 
 
     option.value =
-      card.cardCode;
+      String(
+        card.cardCode || ''
+      ).trim();
 
 
     option.textContent =
-      card.cardCode;
+      String(
+        card.cardCode || ''
+      ).trim();
 
 
     select.appendChild(
@@ -1185,25 +1181,37 @@ function populateDropdown() {
 function handleCardChange() {
 
   const cardCode =
-    document
-      .getElementById(
-        'cardCode'
-      )
-      .value;
+    String(
+      document
+        .getElementById(
+          'cardCode'
+        )
+        .value || ''
+    ).trim();
 
 
   selectedCard =
     activeCards.find(function(card) {
 
       return (
-        String(card.cardCode) ===
-        String(cardCode)
+        String(
+          card.cardCode || ''
+        ).trim() ===
+        cardCode
       );
 
     }) || null;
 
 
   hideMessage();
+
+
+  document
+    .getElementById(
+      'confirmation'
+    )
+    .style.display =
+    'none';
 
 
   const details =
@@ -1218,7 +1226,7 @@ function handleCardChange() {
     );
 
 
-  if (!selectedCard) {
+  if (!selectedCard || !cardCode) {
 
     details.style.display =
       'none';
@@ -1337,9 +1345,35 @@ async function confirmDeactivation() {
   }
 
 
-  const cardCode =
-    selectedCard.cardCode;
+  // ================================================
+  // NORMALIZE CARD CODE
+  // ================================================
 
+  const cardCode =
+    String(
+      selectedCard.cardCode || ''
+    ).trim();
+
+
+  // ================================================
+  // SAFETY CHECK
+  // ================================================
+
+  if (!cardCode) {
+
+    showMessage(
+      'Card Code tidak tersedia untuk card yang dipilih.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  // ================================================
+  // BUTTON LOADING
+  // ================================================
 
   setButtonLoading(true);
 
@@ -1358,6 +1392,10 @@ async function confirmDeactivation() {
   );
 
 
+  // ================================================
+  // REQUEST
+  // ================================================
+
   try {
 
     const result =
@@ -1370,6 +1408,15 @@ async function confirmDeactivation() {
 
 
     console.log(
+      'deactivate request:',
+      {
+        action: 'deactivate',
+        cardCode: cardCode
+      }
+    );
+
+
+    console.log(
       'deactivateCard result:',
       result
     );
@@ -1377,6 +1424,10 @@ async function confirmDeactivation() {
 
     setButtonLoading(false);
 
+
+    // ================================================
+    // API FAILURE
+    // ================================================
 
     if (
       !result ||
@@ -1405,6 +1456,10 @@ async function confirmDeactivation() {
     }
 
 
+    // ================================================
+    // SUCCESS
+    // ================================================
+
     const data =
       result.data || {};
 
@@ -1415,14 +1470,19 @@ async function confirmDeactivation() {
       '<br><br>' +
 
       'Card Code: ' +
-      (data.cardCode || cardCode) +
+      (
+        data.cardCode ||
+        cardCode
+      ) +
 
       '<br>' +
 
       'Student: ' +
-      (data.fullName ||
-       selectedCard.fullName ||
-       '-') +
+      (
+        data.fullName ||
+        selectedCard.fullName ||
+        '-'
+      ) +
 
       (
         data.duration
@@ -1436,15 +1496,18 @@ async function confirmDeactivation() {
     );
 
 
-    // Remove deactivated card
-    // from current active-card list
+    // ================================================
+    // REMOVE DEACTIVATED CARD
+    // ================================================
 
     activeCards =
       activeCards.filter(function(card) {
 
         return (
-          String(card.cardCode) !==
-          String(cardCode)
+          String(
+            card.cardCode || ''
+          ).trim() !==
+          cardCode
         );
 
       });
@@ -1539,11 +1602,15 @@ function resetAfterSuccess() {
 
 
     option.value =
-      card.cardCode;
+      String(
+        card.cardCode || ''
+      ).trim();
 
 
     option.textContent =
-      card.cardCode;
+      String(
+        card.cardCode || ''
+      ).trim();
 
 
     select.appendChild(
