@@ -66,11 +66,11 @@ function doGet(e) {
 
   if (
     action ===
-    'deactivation-config'
+    'load-cards-for-deactivation'
   ) {
 
     return jsonResponse(
-      getDeactivationConfig()
+      loadCardsForDeactivation()
     );
 
   }
