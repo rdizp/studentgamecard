@@ -66,6 +66,22 @@ function doGet(e) {
 
   if (
     action ===
+    'deactivation-config'
+  ) {
+
+    return jsonResponse(
+      getDeactivationConfig()
+    );
+
+  }
+
+
+  // ==========================================
+  // LOAD ACTIVE CARDS FOR DEACTIVATION
+  // ==========================================
+
+  if (
+    action ===
     'load-cards-for-deactivation'
   ) {
 
@@ -77,7 +93,7 @@ function doGet(e) {
 
 
   // ==========================================
-  // EXISTING WEB APP
+  // EXISTING WEB APP / QR ROUTES
   // ==========================================
 
   return handleQRRequest(e);
@@ -164,6 +180,10 @@ function doPost(e) {
 
     }
 
+
+    // ========================================
+    // UNKNOWN ACTION
+    // ========================================
 
     return jsonResponse({
 
