@@ -124,6 +124,40 @@ function doPost(e) {
 
 
     // ========================================
+    // CREATE SESSION
+    // ========================================
+
+    if (
+      action ===
+      'create-session'
+    ) {
+
+      return jsonResponse(
+        createSession()
+      );
+
+    }
+
+
+    // ========================================
+    // TERMINATE SESSION
+    // ========================================
+
+    if (
+      action ===
+      'terminate-session'
+    ) {
+
+      return jsonResponse(
+        terminateSession(
+          data.sessionToken
+        )
+      );
+
+    }
+
+
+    // ========================================
     // RECORD SCORE
     // ========================================
 
@@ -134,6 +168,7 @@ function doPost(e) {
 
       return jsonResponse(
         recordScore(
+          data.sessionToken,
           data.cardCode,
           data.points
         )
