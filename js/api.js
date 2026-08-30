@@ -2,10 +2,25 @@ const API_URL =
   'https://script.google.com/macros/s/AKfycbwqDppJc8kVL4tkjlibwLTbU4wtb030Q3AyEgr6g82rMT9ld1AWILgdsYdQneeOy8Wlxg/exec';
 
 
-async function apiGet(action, params = {}) {
+// ==================================================
+// SESSION
+// ==================================================
+
+let sessionToken = null;
+
+
+// ==================================================
+// GET API
+// ==================================================
+
+async function apiGet(
+  action,
+  params = {}
+) {
 
   const url =
     new URL(API_URL);
+
 
   url.searchParams.set(
     'action',
@@ -55,6 +70,10 @@ async function apiGet(action, params = {}) {
 }
 
 
+// ==================================================
+// POST API
+// ==================================================
+
 async function apiPost(
   action,
   data = {}
@@ -90,5 +109,67 @@ async function apiPost(
 
 
   return response.json();
+
+}
+
+
+// ==================================================
+// CREATE SESSION
+// ==================================================
+
+async function startGameSession() {
+
+  const result =
+    await apiPost(
+      'create-session'
+    );
+
+
+  if (!result.success) {
+
+    throw new Error(
+      result.message ||
+      'Failed to create game session.'
+    );
+
+  }
+
+
+  sessionToken =
+    result.data.sessionToken;
+
+
+  return result;
+
+}
+
+
+// ==================================================
+// TERMINATE SESSION
+// ==================================================
+
+async function endGameSession() {
+
+  if (!sessionToken) {
+    return;
+  }
+
+
+  try {
+
+    await apiPost(
+      'terminate-session',
+      {
+        sessionToken:
+          sessionToken
+      }
+    );
+
+  } finally {
+
+    sessionToken =
+      null;
+
+  }
 
 }
