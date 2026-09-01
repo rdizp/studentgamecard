@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,6 +21,7 @@
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
+
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
     rel="stylesheet"
@@ -34,8 +36,10 @@
       --gray: #D9D9D9;
       --text: #18212F;
       --muted: #697586;
+
       --success-bg: #EAF7EE;
       --success-text: #176B35;
+
       --error-bg: #FDECEC;
       --error-text: #A32121;
     }
@@ -170,6 +174,145 @@
       padding: 22px;
     }
 
+    /* ==================================================
+       OPERATOR AUTHENTICATION
+       ================================================== */
+
+    #operatorSection {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+
+      border-bottom:
+        1px solid #ECEFF2;
+    }
+
+    .operator-heading {
+      margin-bottom: 14px;
+    }
+
+    .operator-heading h2 {
+      margin: 0;
+
+      font-family:
+        Poppins,
+        Arial,
+        sans-serif;
+
+      font-size: 19px;
+      font-weight: 800;
+
+      color: var(--navy);
+    }
+
+    .operator-heading p {
+      margin: 5px 0 0;
+
+      font-size: 12px;
+      line-height: 1.5;
+
+      color: var(--muted);
+    }
+
+    .pin-input {
+      width: 100%;
+
+      padding: 14px 15px;
+
+      border:
+        1px solid #DCE2E8;
+
+      border-radius: 13px;
+
+      background: white;
+      color: var(--text);
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+      font-size: 18px;
+      font-weight: 700;
+
+      letter-spacing: 0.18em;
+
+      text-align: center;
+
+      outline: none;
+
+      transition:
+        border-color 0.12s ease,
+        box-shadow 0.12s ease;
+    }
+
+    .pin-input:focus {
+      border-color:
+        var(--navy);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(30,58,95,0.10);
+    }
+
+    .pin-input::placeholder {
+      color: #A0A8B2;
+      letter-spacing: 0.08em;
+    }
+
+    #unlockButton {
+      width: 100%;
+
+      margin-top: 11px;
+      padding: 14px;
+
+      border: none;
+      border-radius: 13px;
+
+      background:
+        var(--navy);
+
+      color: white;
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+      font-size: 14px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.12s ease,
+        opacity 0.12s ease;
+    }
+
+    #unlockButton:active {
+      transform:
+        scale(0.98);
+    }
+
+    #unlockButton:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    #authMessage {
+      min-height: 20px;
+
+      margin-top: 10px;
+
+      font-size: 12px;
+      font-weight: 700;
+
+      text-align: center;
+    }
+
+    /* ==================================================
+       CARD
+       ================================================== */
+
     .card-code-box {
       display: flex;
       align-items: center;
@@ -279,6 +422,10 @@
       background: var(--error-bg);
       color: var(--error-text);
     }
+
+    /* ==================================================
+       SCORE
+       ================================================== */
 
     #scoreSection {
       margin-top: 28px;
@@ -433,6 +580,10 @@
       transform:
         scale(0.98);
     }
+
+    /* ==================================================
+       SCANNER
+       ================================================== */
 
     #scannerSection {
       margin-top: 24px;
@@ -599,6 +750,53 @@
 
     <main class="content">
 
+      <!-- ==================================================
+           OPERATOR AUTHENTICATION
+           ================================================== -->
+
+      <div id="operatorSection">
+
+        <div class="operator-heading">
+
+          <h2>
+            Operator Access
+          </h2>
+
+          <p>
+            Enter the operator PIN to start a secure scoring session.
+          </p>
+
+        </div>
+
+
+        <input
+          id="operatorPin"
+          class="pin-input"
+          type="password"
+          inputmode="numeric"
+          autocomplete="off"
+          maxlength="20"
+          placeholder="Enter PIN"
+        >
+
+
+        <button
+          id="unlockButton"
+          onclick="unlockOperator()"
+        >
+          Unlock Scoring
+        </button>
+
+
+        <div id="authMessage"></div>
+
+      </div>
+
+
+      <!-- ==================================================
+           PLAYER CARD
+           ================================================== -->
+
       <div class="card-code-box">
 
         <div class="card-code-label">
@@ -671,9 +869,13 @@
         id="status"
         class="status"
       >
-        Loading...
+        Waiting for operator authentication...
       </div>
 
+
+      <!-- ==================================================
+           SCORE SECTION
+           ================================================== -->
 
       <div
         id="scoreSection"
@@ -735,6 +937,10 @@
 
       </div>
 
+
+      <!-- ==================================================
+           SCANNER SECTION
+           ================================================== -->
 
       <div
         id="scannerSection"
@@ -798,6 +1004,13 @@
       status: ''
 
     };
+
+
+    // ==================================================
+    // SCANNER
+    // ==================================================
+
+    let html5QrCode = null;
 
 
     // ==================================================
@@ -904,16 +1117,64 @@
 
 
     // ==================================================
-    // CREATE SESSION
+    // UNLOCK OPERATOR
     // ==================================================
 
-    async function createSession() {
+    async function unlockOperator() {
+
+      const pinInput =
+        document.getElementById(
+          'operatorPin'
+        );
+
+      const unlockButton =
+        document.getElementById(
+          'unlockButton'
+        );
+
+      const authMessage =
+        document.getElementById(
+          'authMessage'
+        );
+
+
+      const pin =
+        String(
+          pinInput.value || ''
+        ).trim();
+
+
+      if (!pin) {
+
+        authMessage.textContent =
+          'Operator PIN tidak diberikan.';
+
+        authMessage.className =
+          'error';
+
+        return;
+
+      }
+
+
+      unlockButton.disabled =
+        true;
+
+      authMessage.textContent =
+        'Authenticating...';
+
+      authMessage.className =
+        '';
+
 
       try {
 
         const result =
           await apiPost(
-            'create-session'
+            'create-session',
+            {
+              operatorPin: pin
+            }
           );
 
 
@@ -925,7 +1186,7 @@
 
           throw new Error(
             result.message ||
-            'Unable to create session.'
+            'Unable to create secure session.'
           );
 
         }
@@ -946,25 +1207,81 @@
         }
 
 
-        return true;
+        // Do not keep the PIN in the input.
+        pinInput.value = '';
+
+
+        // Hide authentication UI.
+        document.getElementById(
+          'operatorSection'
+        ).style.display =
+          'none';
+
+
+        authMessage.textContent =
+          '';
+
+
+        // Load the player card after authentication.
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        const cardCode =
+          params.get('card');
+
+
+        if (!cardCode) {
+
+          showError(
+            'No card code was provided.'
+          );
+
+          return;
+
+        }
+
+
+        const loaded =
+          await loadPlayerCard(
+            cardCode
+          );
+
+
+        if (!loaded) {
+
+          sessionToken = '';
+
+          return;
+
+        }
+
 
       } catch (error) {
 
         console.error(
-          'CREATE SESSION ERROR:',
+          'OPERATOR AUTH ERROR:',
           error
         );
 
 
         sessionToken = '';
 
-        showError(
-          'Unable to start secure session: ' +
-          error.message
-        );
+
+        authMessage.textContent =
+          error.message ||
+          'Operator authentication failed.';
+
+        authMessage.className =
+          'error';
 
 
-        return false;
+      } finally {
+
+        unlockButton.disabled =
+          false;
 
       }
 
@@ -1120,6 +1437,7 @@
 
         return true;
 
+
       } catch (error) {
 
         console.error(
@@ -1137,59 +1455,6 @@
         return false;
 
       }
-
-    }
-
-
-    // ==================================================
-    // INITIAL LOAD
-    // ==================================================
-
-    async function initialize() {
-
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-
-      const cardCode =
-        params.get('card');
-
-
-      if (!cardCode) {
-
-        showError(
-          'No card code was provided.'
-        );
-
-        return;
-
-      }
-
-
-      // ----------------------------------------------
-      // CREATE SECURE SESSION FIRST
-      // ----------------------------------------------
-
-      const sessionCreated =
-        await createSession();
-
-
-      if (!sessionCreated) {
-
-        return;
-
-      }
-
-
-      // ----------------------------------------------
-      // LOAD PLAYER CARD
-      // ----------------------------------------------
-
-      await loadPlayerCard(
-        cardCode
-      );
 
     }
 
@@ -1259,7 +1524,6 @@
       message.textContent =
         'Recording...';
 
-
       message.className =
         '';
 
@@ -1299,6 +1563,7 @@
           scanButton.style.display =
             'block';
 
+
         } else {
 
           message.textContent =
@@ -1312,7 +1577,32 @@
           message.className =
             'error';
 
+
+          // If the session is no longer valid,
+          // immediately lock scoring again.
+          if (
+            result.message &&
+            (
+              result.message
+                .toLowerCase()
+                .includes('session') ||
+              result.message
+                .toLowerCase()
+                .includes('operator')
+            )
+          ) {
+
+            sessionToken = '';
+
+            document.getElementById(
+              'scoreSection'
+            ).style.display =
+              'none';
+
+          }
+
         }
+
 
       } catch (error) {
 
@@ -1326,21 +1616,22 @@
           '✕ Error: ' +
           error.message;
 
-
         message.className =
           'error';
 
+
+      } finally {
+
+        buttons.forEach(
+          function(button) {
+
+            button.disabled =
+              false;
+
+          }
+        );
+
       }
-
-
-      buttons.forEach(
-        function(button) {
-
-          button.disabled =
-            false;
-
-        }
-      );
 
     }
 
@@ -1349,10 +1640,18 @@
     // QR SCANNER
     // ==================================================
 
-    let html5QrCode = null;
-
-
     async function scanAnotherPlayer() {
+
+      if (!sessionToken) {
+
+        showError(
+          'Secure session tidak tersedia.'
+        );
+
+        return;
+
+      }
+
 
       const scannerSection =
         document.getElementById(
@@ -1461,6 +1760,7 @@
 
         );
 
+
       } catch (error) {
 
         console.error(
@@ -1530,6 +1830,7 @@
           card
         );
 
+
       } catch (error) {
 
         console.error(
@@ -1557,6 +1858,17 @@
     async function loadScannedPlayer(
       cardCode
     ) {
+
+      if (!sessionToken) {
+
+        showError(
+          'Secure session tidak tersedia.'
+        );
+
+        return;
+
+      }
+
 
       const success =
         await loadPlayerCard(
@@ -1645,6 +1957,17 @@
 
     function reopenScanner() {
 
+      if (!sessionToken) {
+
+        showError(
+          'Secure session tidak tersedia.'
+        );
+
+        return;
+
+      }
+
+
       document.getElementById(
         'scannerSection'
       ).style.display =
@@ -1716,13 +2039,69 @@
 
 
     // ==================================================
+    // ENTER KEY FOR PIN
+    // ==================================================
+
+    document
+      .getElementById(
+        'operatorPin'
+      )
+      .addEventListener(
+        'keydown',
+        function(event) {
+
+          if (
+            event.key ===
+            'Enter'
+          ) {
+
+            unlockOperator();
+
+          }
+
+        }
+      );
+
+
+    // ==================================================
     // START
     // ==================================================
 
-    initialize();
+    (function initialize() {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+
+      const cardCode =
+        params.get('card');
+
+
+      if (!cardCode) {
+
+        showError(
+          'No card code was provided.'
+        );
+
+        return;
+
+      }
+
+
+      // Card is intentionally NOT loaded
+      // until the operator authenticates.
+      document.getElementById(
+        'status'
+      ).textContent =
+        '🔐 Operator authentication required.';
+
+    })();
 
   </script>
 
 </body>
 
 </html>
+```
