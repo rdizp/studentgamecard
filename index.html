@@ -1,33 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Student Game Card</title>
 
-  <!-- QR Scanner Library -->
-  <script
-    src="https://unpkg.com/html5-qrcode"
-    type="text/javascript"
-  ></script>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap"
     rel="stylesheet"
   >
 
-  <style>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
+  <style>
     :root {
       --navy: #1E3A5F;
       --mustard: #F4B400;
@@ -35,12 +24,9 @@
       --gray: #D9D9D9;
       --text: #18212F;
       --muted: #697586;
-
-      --success-bg: #EAF7EE;
-      --success-text: #176B35;
-
-      --error-bg: #FDECEC;
-      --error-text: #A32121;
+      --white: #FFFFFF;
+      --success: #198754;
+      --danger: #DC3545;
     }
 
     * {
@@ -50,1121 +36,939 @@
     body {
       margin: 0;
       min-height: 100vh;
-
-      padding:
-        20px
-        16px
-        max(20px, env(safe-area-inset-bottom));
-
       background: var(--off-white);
       color: var(--text);
-
-      font-family:
-        Inter,
-        Arial,
-        sans-serif;
+      font-family: "Inter", sans-serif;
     }
 
-    .app-card {
+    .container {
       width: 100%;
-      max-width: 500px;
-
+      max-width: 480px;
       margin: 0 auto;
-
-      background: #ffffff;
-
-      border: 1px solid var(--gray);
-      border-radius: 24px;
-
-      overflow: hidden;
-
-      box-shadow:
-        0 10px 35px rgba(30, 58, 95, 0.10);
+      padding: 24px 18px 40px;
     }
 
-    .app-header {
-      padding: 24px 22px 22px;
-
-      background: var(--navy);
-      color: white;
-
-      position: relative;
-      overflow: hidden;
+    .header {
+      margin-bottom: 20px;
     }
 
-    .app-header::after {
-      content: "";
-
-      position: absolute;
-
-      width: 130px;
-      height: 130px;
-
-      border-radius: 50%;
-
-      background:
-        rgba(244, 180, 0, 0.15);
-
-      right: -45px;
-      top: -55px;
-    }
-
-    .brand-row {
-      display: flex;
-      align-items: center;
-
-      gap: 10px;
-
-      position: relative;
-      z-index: 1;
-    }
-
-    .brand-dot {
-      width: 11px;
-      height: 11px;
-
-      border-radius: 50%;
-
-      background: var(--mustard);
-
-      flex-shrink: 0;
-    }
-
-    .brand-name {
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--mustard);
       font-size: 12px;
       font-weight: 700;
-
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-
-      opacity: 0.9;
     }
 
-    .app-header h1 {
-      margin: 18px 0 5px;
-
-      font-family:
-        Poppins,
-        Arial,
-        sans-serif;
-
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-family: "Poppins", sans-serif;
       font-size: 25px;
       line-height: 1.2;
-      font-weight: 800;
-
-      position: relative;
-      z-index: 1;
     }
 
-    .app-header p {
-      margin: 0;
-
+    .subtitle {
+      margin: 7px 0 0;
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.5;
-
-      color:
-        rgba(255,255,255,0.78);
-
-      position: relative;
-      z-index: 1;
     }
 
-    .content {
-      padding: 22px;
-    }
-
-    /* ==================================================
-       OPERATOR AUTHENTICATION
-       ================================================== */
-
-    #operatorSection {
-      margin-bottom: 24px;
-      padding-bottom: 24px;
-
-      border-bottom:
-        1px solid #ECEFF2;
-    }
-
-    .operator-heading {
+    .card {
       margin-bottom: 14px;
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid #E7EAF0;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(24, 33, 47, 0.05);
     }
 
-    .operator-heading h2 {
-      margin: 0;
-
-      font-family:
-        Poppins,
-        Arial,
-        sans-serif;
-
-      font-size: 19px;
-      font-weight: 800;
-
+    .section-label {
+      margin-bottom: 12px;
       color: var(--navy);
-    }
-
-    .operator-heading p {
-      margin: 5px 0 0;
-
-      font-size: 12px;
-      line-height: 1.5;
-
-      color: var(--muted);
-    }
-
-    .pin-input {
-      width: 100%;
-
-      padding: 14px 15px;
-
-      border:
-        1px solid #DCE2E8;
-
-      border-radius: 13px;
-
-      background: white;
-      color: var(--text);
-
-      font-family:
-        Inter,
-        Arial,
-        sans-serif;
-
-      font-size: 18px;
+      font-family: "Poppins", sans-serif;
+      font-size: 15px;
       font-weight: 700;
-
-      letter-spacing: 0.18em;
-
-      text-align: center;
-
-      outline: none;
-
-      transition:
-        border-color 0.12s ease,
-        box-shadow 0.12s ease;
     }
 
-    .pin-input:focus {
-      border-color:
-        var(--navy);
-
-      box-shadow:
-        0 0 0 3px
-        rgba(30,58,95,0.10);
-    }
-
-    .pin-input::placeholder {
-      color: #A0A8B2;
-      letter-spacing: 0.08em;
-    }
-
-    #unlockButton {
-      width: 100%;
-
-      margin-top: 11px;
-      padding: 14px;
-
-      border: none;
-      border-radius: 13px;
-
-      background:
-        var(--navy);
-
-      color: white;
-
-      font-family:
-        Inter,
-        Arial,
-        sans-serif;
-
-      font-size: 14px;
-      font-weight: 800;
-
-      cursor: pointer;
-
-      transition:
-        transform 0.12s ease,
-        opacity 0.12s ease;
-    }
-
-    #unlockButton:active {
-      transform:
-        scale(0.98);
-    }
-
-    #unlockButton:disabled {
-      opacity: 0.55;
-      cursor: wait;
-    }
-
-    #authMessage {
-      min-height: 20px;
-
-      margin-top: 10px;
-
-      font-size: 12px;
-      font-weight: 700;
-
-      text-align: center;
-    }
-
-    /* ==================================================
-       CARD
-       ================================================== */
-
-    .card-code-box {
+    .info-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-
-      gap: 12px;
-
-      padding: 14px 15px;
-
-      background: #F4F7FA;
-
-      border: 1px solid #E2E7ED;
-
-      border-radius: 14px;
-
-      margin-bottom: 22px;
+      gap: 16px;
+      padding: 9px 0;
+      border-bottom: 1px solid #EEF0F3;
     }
 
-    .card-code-label {
-      font-size: 11px;
-      font-weight: 700;
+    .info-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
 
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-
+    .info-label {
       color: var(--muted);
+      font-size: 12px;
     }
 
-    .card-code-value {
-      font-family:
-        Poppins,
-        Arial,
-        sans-serif;
-
-      font-size: 16px;
-      font-weight: 800;
-
-      color: var(--navy);
-
-      text-align: right;
-
-      word-break: break-word;
-    }
-
-    .info-section {
-      display: flex;
-      flex-direction: column;
-
-      gap: 15px;
-    }
-
-    .info-item {
-      display: grid;
-
-      grid-template-columns: 1fr;
-
-      gap: 4px;
-    }
-
-    .label {
-      font-size: 11px;
-      font-weight: 700;
-
-      color: var(--muted);
-
-      text-transform: uppercase;
-      letter-spacing: 0.055em;
-    }
-
-    .value {
-      font-size: 16px;
-      line-height: 1.4;
-
-      font-weight: 600;
-
+    .info-value {
       color: var(--text);
-
+      font-size: 13px;
+      font-weight: 600;
+      text-align: right;
       word-break: break-word;
     }
 
     .status {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-
-      gap: 8px;
-
-      margin-top: 22px;
-      padding: 13px 15px;
-
-      border-radius: 13px;
-
-      font-size: 13px;
-      font-weight: 800;
-
-      letter-spacing: 0.03em;
-
-      text-align: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .status.active {
-      background: var(--success-bg);
-      color: var(--success-text);
+      color: var(--success);
+      background: #EAF7EF;
     }
 
     .status.inactive {
-      background: var(--error-bg);
-      color: var(--error-text);
-    }
-
-    /* ==================================================
-       SCORE
-       ================================================== */
-
-    #scoreSection {
-      margin-top: 28px;
-      padding-top: 24px;
-
-      border-top:
-        1px solid #ECEFF2;
-    }
-
-    .section-heading {
-      margin-bottom: 14px;
-    }
-
-    .section-heading h2 {
-      margin: 0;
-
-      font-family:
-        Poppins,
-        Arial,
-        sans-serif;
-
-      font-size: 19px;
-      font-weight: 800;
-
-      color: var(--navy);
-    }
-
-    .section-heading p {
-      margin: 4px 0 0;
-
-      font-size: 12px;
-
       color: var(--muted);
+      background: #F0F2F5;
     }
 
-    .score-buttons {
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, 1fr);
-
-      gap: 10px;
+    .status.error {
+      color: var(--danger);
+      background: #FDECEE;
     }
 
-    .score-buttons button {
-      min-height: 58px;
-
-      border: 1px solid #DCE2E8;
-      border-radius: 15px;
-
-      background: white;
-      color: var(--navy);
-
-      font-family:
-        Poppins,
-        Arial,
-        sans-serif;
-
-      font-size: 18px;
-      font-weight: 800;
-
-      cursor: pointer;
-
-      box-shadow:
-        0 3px 8px
-        rgba(30,58,95,0.06);
-
-      transition:
-        transform 0.12s ease,
-        background 0.12s ease,
-        border-color 0.12s ease;
+    .pin-card {
+      display: none;
     }
 
-    .score-buttons button:hover {
-      background: #FFF8E5;
-
-      border-color:
-        var(--mustard);
+    .pin-card.visible {
+      display: block;
     }
 
-    .score-buttons button:active {
-      transform: scale(0.96);
-
-      background:
-        var(--mustard);
-
-      border-color:
-        var(--mustard);
-
-      color: var(--navy);
+    .pin-description {
+      margin: -4px 0 13px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
     }
 
-    .score-buttons button:disabled {
-      opacity: 0.5;
-      cursor: wait;
+    .pin-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      border: 1px solid var(--gray);
+      border-radius: 11px;
+      outline: none;
+      background: var(--white);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.18em;
+      text-align: center;
+      transition: 0.2s;
     }
 
-    #recordMessage {
-      min-height: 22px;
+    .pin-input:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+    }
 
-      margin-top: 13px;
-
+    .btn {
+      width: 100%;
+      min-height: 46px;
+      border: none;
+      border-radius: 11px;
+      font-family: "Inter", sans-serif;
       font-size: 13px;
       font-weight: 700;
-
-      text-align: center;
-    }
-
-    .success {
-      color:
-        var(--success-text);
-    }
-
-    .error {
-      color:
-        var(--error-text);
-    }
-
-    #scanAnotherButton {
-      width: 100%;
-
-      margin-top: 13px;
-      padding: 14px;
-
-      border: none;
-      border-radius: 13px;
-
-      background:
-        var(--mustard);
-
-      color: var(--navy);
-
-      font-family:
-        Inter,
-        Arial,
-        sans-serif;
-
-      font-size: 14px;
-      font-weight: 800;
-
       cursor: pointer;
-
-      box-shadow:
-        0 5px 14px
-        rgba(244,180,0,0.22);
-
-      transition:
-        transform 0.12s ease;
+      transition: 0.15s ease;
     }
 
-    #scanAnotherButton:active {
-      transform:
-        scale(0.98);
+    .btn:active {
+      transform: scale(0.98);
     }
 
-    /* ==================================================
-       SCANNER
-       ================================================== */
-
-    #scannerSection {
-      margin-top: 24px;
-      padding-top: 24px;
-
-      border-top:
-        1px solid #ECEFF2;
+    .btn-primary {
+      margin-top: 10px;
+      background: var(--navy);
+      color: var(--white);
     }
 
-    #scannerTitle {
-      margin: 0 0 14px;
+    .btn-primary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
 
-      font-family:
-        Poppins,
-        Arial,
-        sans-serif;
+    .pin-message {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
 
-      font-size: 18px;
-      font-weight: 800;
+    .pin-message.error {
+      display: block;
+      color: var(--danger);
+      background: #FDECEE;
+    }
 
+    .pin-message.success {
+      display: block;
+      color: var(--success);
+      background: #EAF7EF;
+    }
+
+    .score-card {
+      display: none;
+    }
+
+    .score-card.visible {
+      display: block;
+    }
+
+    .score-description {
+      margin: -3px 0 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .score-btn {
+      min-height: 48px;
+      border: 1px solid #DCE1E8;
+      border-radius: 10px;
+      background: var(--white);
       color: var(--navy);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
 
-      text-align: center;
+    .score-btn:hover {
+      border-color: var(--navy);
+      background: #F3F6FA;
+    }
+
+    .score-btn:active {
+      transform: scale(0.96);
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .feedback.visible {
+      display: block;
+    }
+
+    .feedback.success {
+      color: var(--success);
+      background: #EAF7EF;
+    }
+
+    .feedback.error {
+      color: var(--danger);
+      background: #FDECEE;
+    }
+
+    .secondary-btn {
+      margin-top: 12px;
+      background: #EEF1F5;
+      color: var(--navy);
+    }
+
+    .scanner-card {
+      display: none;
+    }
+
+    .scanner-card.visible {
+      display: block;
     }
 
     #reader {
       width: 100%;
-
       overflow: hidden;
-
-      border:
-        1px solid var(--gray);
-
-      border-radius: 16px;
-
-      background: #111;
+      border-radius: 12px;
     }
 
-    #reader video {
-      border-radius: 15px;
-    }
-
-    #reader button {
-      border: none !important;
-      border-radius: 9px !important;
-
-      padding:
-        9px 13px !important;
-
-      font-family:
-        Inter,
-        Arial,
-        sans-serif !important;
-
-      font-weight:
-        700 !important;
-    }
-
-    #scannerMessage {
-      margin-top: 11px;
-
-      font-size: 12px;
-      line-height: 1.5;
-
+    .scanner-note {
+      margin-top: 10px;
       color: var(--muted);
-
+      font-size: 11px;
+      line-height: 1.5;
       text-align: center;
     }
 
-    #closeScannerButton {
-      width: 100%;
-
-      margin-top: 13px;
-      padding: 13px;
-
-      border:
-        1px solid var(--gray);
-
-      border-radius: 12px;
-
-      background: white;
-      color: var(--navy);
-
+    .loading {
+      display: none;
+      padding: 20px;
+      color: var(--muted);
       font-size: 13px;
-      font-weight: 700;
-
-      cursor: pointer;
+      text-align: center;
     }
 
-    #closeScannerButton:active {
-      background: #F1F3F5;
+    .loading.visible {
+      display: block;
     }
 
-    @media (min-width: 480px) {
-
-      body {
-        padding-top: 40px;
-        padding-bottom: 40px;
-      }
-
-      .content {
-        padding: 25px;
-      }
-
+    .empty-state {
+      display: none;
+      padding: 18px;
+      border: 1px dashed var(--gray);
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
     }
 
-    @media (max-width: 360px) {
-
-      body {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-
-      .app-header {
-        padding-left: 18px;
-        padding-right: 18px;
-      }
-
-      .content {
-        padding: 18px;
-      }
-
-      .app-header h1 {
-        font-size: 22px;
-      }
-
-      .value {
-        font-size: 15px;
-      }
-
+    .empty-state.visible {
+      display: block;
     }
 
+    .hidden {
+      display: none !important;
+    }
   </style>
-
 </head>
-
 
 <body>
 
-  <div class="app-card">
+  <main class="container">
 
-    <header class="app-header">
-
-      <div class="brand-row">
-
-        <span class="brand-dot"></span>
-
-        <span class="brand-name">
-          Student Game Card
-        </span>
-
-      </div>
-
-      <h1>
-        Player Card
-      </h1>
-
-      <p>
-        Scan, verify, and record game points.
+    <header class="header">
+      <p class="eyebrow">Student Game Card</p>
+      <h1>Record Points</h1>
+      <p class="subtitle">
+        Scan a player card to view the card owner and record points.
       </p>
-
     </header>
 
 
-    <main class="content">
+    <!-- =========================
+         CARD INFORMATION
+         ========================= -->
+    <section class="card" id="cardInfoSection">
 
-      <!-- ==================================================
-           OPERATOR AUTHENTICATION
-           ================================================== -->
+      <div class="section-label">
+        Card Information
+      </div>
 
-      <div id="operatorSection">
+      <div id="cardLoading" class="loading visible">
+        Loading card information...
+      </div>
 
-        <div class="operator-heading">
+      <div id="cardInfo" class="hidden">
 
-          <h2>
-            Operator Access
-          </h2>
-
-          <p>
-            Enter the operator PIN to start a secure scoring session.
-          </p>
-
+        <div class="info-row">
+          <span class="info-label">Card Code</span>
+          <span class="info-value" id="cardCodeValue">—</span>
         </div>
 
+        <div class="info-row">
+          <span class="info-label">Full Name</span>
+          <span class="info-value" id="fullNameValue">—</span>
+        </div>
 
-        <input
-          id="operatorPin"
-          class="pin-input"
-          type="password"
-          inputmode="numeric"
-          autocomplete="off"
-          maxlength="20"
-          placeholder="Enter PIN"
-        >
+        <div class="info-row">
+          <span class="info-label">NIM</span>
+          <span class="info-value" id="nimValue">—</span>
+        </div>
 
+        <div class="info-row">
+          <span class="info-label">Enrolled Practical Course</span>
+          <span class="info-value" id="courseValue">—</span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">Card Status</span>
+          <span class="info-value">
+            <span id="statusValue" class="status inactive">
+              —
+            </span>
+          </span>
+        </div>
+
+      </div>
+
+      <div id="cardEmpty" class="empty-state">
+        Card information could not be loaded.
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         OPERATOR PIN
+         ========================= -->
+    <section class="card pin-card" id="pinSection">
+
+      <div class="section-label">
+        Operator Authentication
+      </div>
+
+      <p class="pin-description">
+        Enter the operator PIN to unlock point recording.
+      </p>
+
+      <input
+        id="pinInput"
+        class="pin-input"
+        type="password"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="••••"
+        maxlength="20"
+      >
+
+      <button
+        id="authenticateBtn"
+        class="btn btn-primary"
+        type="button"
+        onclick="authenticateAndUnlock()"
+      >
+        Unlock Record Points
+      </button>
+
+      <div id="pinMessage" class="pin-message"></div>
+
+    </section>
+
+
+    <!-- =========================
+         SCORE
+         ========================= -->
+    <section class="card score-card" id="scoreSection">
+
+      <div class="section-label">
+        Record Points
+      </div>
+
+      <p class="score-description">
+        Select the points earned by this player.
+      </p>
+
+      <div class="score-grid">
 
         <button
-          id="unlockButton"
-          onclick="unlockOperator()"
+          class="score-btn"
+          type="button"
+          onclick="recordScore(1)"
         >
-          Unlock Scoring
+          +1
         </button>
 
-
-        <div id="authMessage"></div>
-
-      </div>
-
-
-      <!-- ==================================================
-           PLAYER CARD
-           ================================================== -->
-
-      <div class="card-code-box">
-
-        <div class="card-code-label">
-          Card Code
-        </div>
-
-        <div
-          class="card-code-value"
-          id="cardCode"
+        <button
+          class="score-btn"
+          type="button"
+          onclick="recordScore(2)"
         >
-          -
-        </div>
-
-      </div>
-
-
-      <div class="info-section">
-
-        <div class="info-item">
-
-          <div class="label">
-            Full Name
-          </div>
-
-          <div
-            class="value"
-            id="fullName"
-          >
-            -
-          </div>
-
-        </div>
-
-
-        <div class="info-item">
-
-          <div class="label">
-            NIM
-          </div>
-
-          <div
-            class="value"
-            id="nim"
-          >
-            -
-          </div>
-
-        </div>
-
-
-        <div class="info-item">
-
-          <div class="label">
-            Enrolled Practical Course
-          </div>
-
-          <div
-            class="value"
-            id="course"
-          >
-            -
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="status"
-        class="status"
-      >
-        Waiting for operator authentication...
-      </div>
-
-
-      <!-- ==================================================
-           SCORE SECTION
-           ================================================== -->
-
-      <div
-        id="scoreSection"
-        style="display: none;"
-      >
-
-        <div class="section-heading">
-
-          <h2>
-            Record Points
-          </h2>
-
-          <p>
-            Tap the points earned by the player.
-          </p>
-
-        </div>
-
-
-        <div class="score-buttons">
-
-          <button
-            onclick="recordScore(1)"
-          >
-            +1
-          </button>
-
-          <button
-            onclick="recordScore(2)"
-          >
-            +2
-          </button>
-
-          <button
-            onclick="recordScore(3)"
-          >
-            +3
-          </button>
-
-          <button
-            onclick="recordScore(5)"
-          >
-            +5
-          </button>
-
-        </div>
-
-
-        <div id="recordMessage"></div>
-
+          +2
+        </button>
 
         <button
-          id="scanAnotherButton"
-          onclick="scanAnotherPlayer()"
-          style="display: none;"
+          class="score-btn"
+          type="button"
+          onclick="recordScore(3)"
         >
-          📷 Scan Another Player
+          +3
+        </button>
+
+        <button
+          class="score-btn"
+          type="button"
+          onclick="recordScore(5)"
+        >
+          +5
         </button>
 
       </div>
 
+      <div id="scoreFeedback" class="feedback"></div>
 
-      <!-- ==================================================
-           SCANNER SECTION
-           ================================================== -->
-
-      <div
-        id="scannerSection"
-        style="display: none;"
+      <button
+        class="btn secondary-btn"
+        type="button"
+        onclick="scanAnotherPlayer()"
       >
+        Scan Another Player
+      </button>
 
-        <h3 id="scannerTitle">
-          Scan Another Player
-        </h3>
-
-
-        <div id="reader"></div>
+    </section>
 
 
-        <div id="scannerMessage">
-          Point the camera at the player's QR code.
-        </div>
+    <!-- =========================
+         SCANNER
+         ========================= -->
+    <section class="card scanner-card" id="scannerSection">
 
-
-        <button
-          id="closeScannerButton"
-          onclick="closeScanner()"
-        >
-          Close Scanner
-        </button>
-
+      <div class="section-label">
+        Scan Player Card
       </div>
 
-    </main>
+      <div id="reader"></div>
 
-  </div>
+      <p class="scanner-note">
+        Point the camera at the QR code on the player's card.
+      </p>
+
+    </section>
+
+  </main>
 
 
   <script>
 
-    // ==================================================
-    // API CONFIG
-    // ==================================================
+    /**
+     * ========================================================
+     * CONFIG
+     * ========================================================
+     */
 
     const API_URL =
       'https://script.google.com/macros/s/AKfycbwqDppJc8kVL4tkjlibwLTbU4wtb030Q3AyEgr6g82rMT9ld1AWILgdsYdQneeOy8Wlxg/exec';
 
 
-    // ==================================================
-    // SESSION
-    // ==================================================
+    /**
+     * ========================================================
+     * STATE
+     * ========================================================
+     */
+
+    let cardData = null;
 
     let sessionToken = '';
 
+    let scanner = null;
 
-    // ==================================================
-    // CARD DATA
-    // ==================================================
-
-    let cardData = {
-
-      cardCode: '',
-      fullName: '',
-      nim: '',
-      course: '',
-      status: ''
-
-    };
+    let scannerRunning = false;
 
 
-    // ==================================================
-    // SCANNER
-    // ==================================================
+    /**
+     * ========================================================
+     * API GET
+     * ========================================================
+     */
 
-    let html5QrCode = null;
-
-
-    // ==================================================
-    // API HELPER
-    // ==================================================
-
-    async function apiGet(
-      action,
-      params = {}
-    ) {
+    async function apiGet(action, params = {}) {
 
       const url =
         new URL(API_URL);
-
 
       url.searchParams.set(
         'action',
         action
       );
 
+      Object.keys(params).forEach(function(key) {
 
-      Object.entries(params)
-        .forEach(function (
-          [key, value]
+        if (
+          params[key] !== undefined &&
+          params[key] !== null
         ) {
+          url.searchParams.set(
+            key,
+            params[key]
+          );
+        }
 
-          if (
-            value !== undefined &&
-            value !== null
-          ) {
+      });
 
-            url.searchParams.set(
-              key,
-              value
-            );
-
-          }
-
+      const response =
+        await fetch(url.toString(), {
+          method: 'GET'
         });
 
-
-      const response =
-        await fetch(
-          url.toString(),
-          {
-            method: 'GET'
-          }
-        );
-
-
       if (!response.ok) {
-
         throw new Error(
-          'HTTP ' +
-          response.status
+          'HTTP ' + response.status
         );
-
       }
 
-
       return await response.json();
-
     }
 
 
-    async function apiPost(
-      action,
-      data = {}
-    ) {
+    /**
+     * ========================================================
+     * API POST
+     * ========================================================
+     */
+
+    async function apiPost(action, data = {}) {
+
+      const payload = {
+        action: action,
+        ...data
+      };
 
       const response =
-        await fetch(
-          API_URL,
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type':
-                'text/plain;charset=utf-8'
-            },
-
-            body:
-              JSON.stringify({
-                action,
-                ...data
-              })
-          }
-        );
-
+        await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(payload)
+        });
 
       if (!response.ok) {
-
         throw new Error(
-          'HTTP ' +
-          response.status
+          'HTTP ' + response.status
         );
-
       }
 
-
       return await response.json();
-
     }
 
 
-    // ==================================================
-    // UNLOCK OPERATOR
-    // ==================================================
+    /**
+     * ========================================================
+     * LOAD PLAYER CARD
+     * ========================================================
+     * Public lookup.
+     *
+     * IMPORTANT:
+     * This happens BEFORE operator authentication.
+     *
+     * Students can therefore see:
+     * - Card Code
+     * - Full Name
+     * - NIM
+     * - Course
+     * - Card Status
+     *
+     * But they cannot record points.
+     */
 
-    async function unlockOperator() {
+    async function loadPlayerCard(cardCode) {
+
+      const normalizedCardCode =
+        String(cardCode || '')
+          .trim()
+          .toUpperCase();
+
+      if (!normalizedCardCode) {
+
+        showCardError(
+          'Card Code tidak ditemukan.'
+        );
+
+        return false;
+      }
+
+      setCardLoading(true);
+
+      hidePinSection();
+
+      hideScoreSection();
+
+      try {
+
+        const result =
+          await apiGet(
+            'card',
+            {
+              card: normalizedCardCode
+            }
+          );
+
+        if (!result || !result.success) {
+
+          showCardError(
+            result?.message ||
+            'Data kartu tidak ditemukan.'
+          );
+
+          return false;
+        }
+
+        cardData = result.data || result;
+
+        displayCardInfo(cardData);
+
+        showPinSection();
+
+        return true;
+
+      } catch (error) {
+
+        console.error(
+          'loadPlayerCard error:',
+          error
+        );
+
+        showCardError(
+          'Gagal memuat informasi kartu.'
+        );
+
+        return false;
+
+      } finally {
+
+        setCardLoading(false);
+      }
+    }
+
+
+    /**
+     * ========================================================
+     * DISPLAY CARD INFO
+     * ========================================================
+     */
+
+    function displayCardInfo(data) {
+
+      const cardCode =
+        data.cardCode ||
+        data.card_code ||
+        '—';
+
+      const fullName =
+        data.fullName ||
+        data.full_name ||
+        data.nama ||
+        '—';
+
+      const nim =
+        data.nim ||
+        data.NIM ||
+        '—';
+
+      const course =
+        data.course ||
+        data.courseName ||
+        data.course_name ||
+        data.mk ||
+        '—';
+
+      const status =
+        String(
+          data.status ||
+          'INACTIVE'
+        )
+          .trim()
+          .toUpperCase();
+
+      document.getElementById(
+        'cardCodeValue'
+      ).textContent = cardCode;
+
+      document.getElementById(
+        'fullNameValue'
+      ).textContent = fullName;
+
+      document.getElementById(
+        'nimValue'
+      ).textContent = nim;
+
+      document.getElementById(
+        'courseValue'
+      ).textContent = course;
+
+
+      const statusElement =
+        document.getElementById(
+          'statusValue'
+        );
+
+      statusElement.textContent =
+        status;
+
+      statusElement.className =
+        'status ' +
+        (
+          status === 'ACTIVE'
+            ? 'active'
+            : status === 'ERROR'
+              ? 'error'
+              : 'inactive'
+        );
+
+
+      document.getElementById(
+        'cardInfo'
+      ).classList.remove('hidden');
+
+      document.getElementById(
+        'cardEmpty'
+      ).classList.remove('visible');
+    }
+
+
+    /**
+     * ========================================================
+     * CARD LOADING
+     * ========================================================
+     */
+
+    function setCardLoading(isLoading) {
+
+      const loading =
+        document.getElementById(
+          'cardLoading'
+        );
+
+      const info =
+        document.getElementById(
+          'cardInfo'
+        );
+
+      if (isLoading) {
+
+        loading.classList.add(
+          'visible'
+        );
+
+        info.classList.add(
+          'hidden'
+        );
+
+      } else {
+
+        loading.classList.remove(
+          'visible'
+        );
+      }
+    }
+
+
+    /**
+     * ========================================================
+     * CARD ERROR
+     * ========================================================
+     */
+
+    function showCardError(message) {
+
+      setCardLoading(false);
+
+      document.getElementById(
+        'cardInfo'
+      ).classList.add('hidden');
+
+      const empty =
+        document.getElementById(
+          'cardEmpty'
+        );
+
+      empty.textContent =
+        message;
+
+      empty.classList.add(
+        'visible'
+      );
+    }
+
+
+    /**
+     * ========================================================
+     * PIN SECTION
+     * ========================================================
+     */
+
+    function showPinSection() {
+
+      document.getElementById(
+        'pinSection'
+      ).classList.add('visible');
+
+      document.getElementById(
+        'pinInput'
+      ).focus();
+    }
+
+
+    function hidePinSection() {
+
+      document.getElementById(
+        'pinSection'
+      ).classList.remove('visible');
+
+      document.getElementById(
+        'pinInput'
+      ).value = '';
+
+      clearPinMessage();
+    }
+
+
+    /**
+     * ========================================================
+     * OPERATOR AUTHENTICATION
+     * ========================================================
+     *
+     * PIN is sent to backend.
+     *
+     * Backend:
+     * createSession(operatorPin)
+     *
+     * If correct:
+     * - generates sessionId
+     * - generates sessionToken
+     * - saves ACTIVE session
+     * - returns sessionToken
+     *
+     * The token is NEVER manually entered.
+     */
+
+    async function authenticateAndUnlock() {
 
       const pinInput =
         document.getElementById(
-          'operatorPin'
+          'pinInput'
         );
 
-      const unlockButton =
+      const authenticateBtn =
         document.getElementById(
-          'unlockButton'
+          'authenticateBtn'
         );
-
-      const authMessage =
-        document.getElementById(
-          'authMessage'
-        );
-
 
       const pin =
         String(
           pinInput.value || ''
         ).trim();
 
-
       if (!pin) {
 
-        authMessage.textContent =
-          'Operator PIN tidak diberikan.';
+        showPinMessage(
+          'Masukkan PIN operator terlebih dahulu.',
+          'error'
+        );
 
-        authMessage.className =
-          'error';
+        pinInput.focus();
 
         return;
-
       }
 
-
-      unlockButton.disabled =
+      authenticateBtn.disabled =
         true;
 
-      authMessage.textContent =
+      authenticateBtn.textContent =
         'Authenticating...';
 
-      authMessage.className =
-        '';
-
+      clearPinMessage();
 
       try {
 
@@ -1176,356 +980,171 @@
             }
           );
 
+        if (!result || !result.success) {
 
-        if (
-          !result.success ||
-          !result.data ||
-          !result.data.sessionToken
-        ) {
-
-          throw new Error(
-            result.message ||
-            'Unable to create secure session.'
+          showPinMessage(
+            result?.message ||
+            'PIN operator salah.',
+            'error'
           );
 
+          return;
         }
 
 
+        /*
+         * Store the backend-generated
+         * session token.
+         */
         sessionToken =
-          String(
-            result.data.sessionToken
-          ).trim();
+          result.sessionToken || '';
 
 
         if (!sessionToken) {
 
-          throw new Error(
-            'Session token kosong.'
-          );
-
-        }
-
-
-        // Do not keep the PIN in the input.
-        pinInput.value = '';
-
-
-        // Hide authentication UI.
-        document.getElementById(
-          'operatorSection'
-        ).style.display =
-          'none';
-
-
-        authMessage.textContent =
-          '';
-
-
-        // Load the player card after authentication.
-        const params =
-          new URLSearchParams(
-            window.location.search
-          );
-
-
-        const cardCode =
-          params.get('card');
-
-
-        if (!cardCode) {
-
-          showError(
-            'No card code was provided.'
+          showPinMessage(
+            'Session token tidak diterima dari server.',
+            'error'
           );
 
           return;
-
         }
 
 
-        const loaded =
-          await loadPlayerCard(
-            cardCode
-          );
+        showPinMessage(
+          'Operator terautentikasi. Record Points unlocked.',
+          'success'
+        );
 
-
-        if (!loaded) {
-
-          sessionToken = '';
-
-          return;
-
-        }
-
+        showScoreSection();
 
       } catch (error) {
 
         console.error(
-          'OPERATOR AUTH ERROR:',
+          'authenticateAndUnlock error:',
           error
         );
 
-
-        sessionToken = '';
-
-
-        authMessage.textContent =
-          error.message ||
-          'Operator authentication failed.';
-
-        authMessage.className =
-          'error';
-
+        showPinMessage(
+          'Gagal menghubungi server.',
+          'error'
+        );
 
       } finally {
 
-        unlockButton.disabled =
+        authenticateBtn.disabled =
           false;
 
+        authenticateBtn.textContent =
+          'Unlock Record Points';
       }
-
     }
 
 
-    // ==================================================
-    // DISPLAY CARD
-    // ==================================================
+    /**
+     * ========================================================
+     * PIN MESSAGE
+     * ========================================================
+     */
 
-    function displayCard(data) {
-
-      document.getElementById(
-        'cardCode'
-      ).textContent =
-        data.cardCode || '-';
-
-
-      document.getElementById(
-        'fullName'
-      ).textContent =
-        data.fullName || '-';
-
-
-      document.getElementById(
-        'nim'
-      ).textContent =
-        data.nim || '-';
-
-
-      document.getElementById(
-        'course'
-      ).textContent =
-        data.course || '-';
-
-
-      updateStatus(data);
-
-    }
-
-
-    // ==================================================
-    // UPDATE STATUS
-    // ==================================================
-
-    function updateStatus(data) {
-
-      const statusElement =
-        document.getElementById(
-          'status'
-        );
-
-
-      const scoreSection =
-        document.getElementById(
-          'scoreSection'
-        );
-
-
-      const isActive =
-        String(data.status)
-          .trim()
-          .toLowerCase() ===
-        'active';
-
-
-      statusElement.className =
-        'status';
-
-
-      if (isActive) {
-
-        statusElement.textContent =
-          '🟢 ACTIVE';
-
-
-        statusElement.classList.add(
-          'active'
-        );
-
-
-        if (sessionToken) {
-
-          scoreSection.style.display =
-            'block';
-
-        } else {
-
-          scoreSection.style.display =
-            'none';
-
-        }
-
-      } else {
-
-        statusElement.textContent =
-          '🔴 CARD NOT ACTIVE';
-
-
-        statusElement.classList.add(
-          'inactive'
-        );
-
-
-        scoreSection.style.display =
-          'none';
-
-      }
-
-    }
-
-
-    // ==================================================
-    // LOAD PLAYER CARD
-    // ==================================================
-
-    async function loadPlayerCard(
-      cardCode
+    function showPinMessage(
+      message,
+      type
     ) {
 
-      try {
-
-        const result =
-          await apiGet(
-            'card',
-            {
-              card: cardCode
-            }
-          );
-
-
-        if (!result.success) {
-
-          showError(
-            result.message ||
-            'Unable to load player card.'
-          );
-
-
-          return false;
-
-        }
-
-
-        cardData =
-          result.data;
-
-
-        displayCard(
-          cardData
+      const element =
+        document.getElementById(
+          'pinMessage'
         );
 
+      element.textContent =
+        message;
 
-        return true;
-
-
-      } catch (error) {
-
-        console.error(
-          'LOAD CARD ERROR:',
-          error
-        );
-
-
-        showError(
-          'Error loading player: ' +
-          error.message
-        );
-
-
-        return false;
-
-      }
-
+      element.className =
+        'pin-message ' +
+        type;
     }
 
 
-    // ==================================================
-    // RECORD SCORE
-    // ==================================================
+    function clearPinMessage() {
 
-    async function recordScore(
-      points
-    ) {
+      const element =
+        document.getElementById(
+          'pinMessage'
+        );
+
+      element.textContent = '';
+
+      element.className =
+        'pin-message';
+    }
+
+
+    /**
+     * ========================================================
+     * SCORE SECTION
+     * ========================================================
+     */
+
+    function showScoreSection() {
+
+      document.getElementById(
+        'scoreSection'
+      ).classList.add('visible');
+    }
+
+
+    function hideScoreSection() {
+
+      document.getElementById(
+        'scoreSection'
+      ).classList.remove('visible');
+    }
+
+
+    /**
+     * ========================================================
+     * RECORD SCORE
+     * ========================================================
+     *
+     * Backend MUST validate sessionToken.
+     *
+     * UI hiding is NOT the security layer.
+     */
+
+    async function recordScore(points) {
 
       if (!sessionToken) {
 
-        showError(
-          'Secure session tidak tersedia.'
+        showScoreFeedback(
+          'Session operator tidak valid.',
+          'error'
         );
 
         return;
-
       }
 
+      if (
+        !cardData ||
+        !cardData.cardCode
+      ) {
 
-      if (!cardData.cardCode) {
-
-        showError(
-          'Player card belum tersedia.'
+        showScoreFeedback(
+          'Data kartu tidak tersedia.',
+          'error'
         );
 
         return;
-
       }
 
-
-      const buttons =
+      const scoreButtons =
         document.querySelectorAll(
-          '.score-buttons button'
+          '.score-btn'
         );
 
-
-      const message =
-        document.getElementById(
-          'recordMessage'
-        );
-
-
-      const scanButton =
-        document.getElementById(
-          'scanAnotherButton'
-        );
-
-
-      buttons.forEach(
-        function(button) {
-
-          button.disabled =
-            true;
-
-        }
-      );
-
-
-      scanButton.style.display =
-        'none';
-
-
-      message.textContent =
-        'Recording...';
-
-      message.className =
-        '';
-
+      scoreButtons.forEach(function(button) {
+        button.disabled = true;
+      });
 
       try {
 
@@ -1533,7 +1152,6 @@
           await apiPost(
             'record-score',
             {
-
               sessionToken:
                 sessionToken,
 
@@ -1541,198 +1159,173 @@
                 cardData.cardCode,
 
               points:
-                points
-
+                Number(points)
             }
           );
 
 
-        if (result.success) {
+        if (!result || !result.success) {
 
-          message.textContent =
-            '✓ ' +
-            points +
-            ' point(s) recorded.';
+          showScoreFeedback(
+            result?.message ||
+            'Gagal menyimpan poin.',
+            'error'
+          );
 
-
-          message.className =
-            'success';
-
-
-          scanButton.style.display =
-            'block';
-
-
-        } else {
-
-          message.textContent =
-            '✕ ' +
-            (
-              result.message ||
-              'Failed to record score.'
-            );
-
-
-          message.className =
-            'error';
-
-
-          // If the session is no longer valid,
-          // immediately lock scoring again.
+          /*
+           * If backend rejects the session,
+           * lock scoring again.
+           */
           if (
-            result.message &&
-            (
-              result.message
-                .toLowerCase()
-                .includes('session') ||
-              result.message
-                .toLowerCase()
-                .includes('operator')
-            )
+            result?.status === 'EXPIRED' ||
+            result?.status === 'TERMINATED'
           ) {
 
             sessionToken = '';
 
-            document.getElementById(
-              'scoreSection'
-            ).style.display =
-              'none';
+            hideScoreSection();
 
+            showPinMessage(
+              'Session operator sudah tidak aktif. Masukkan PIN kembali.',
+              'error'
+            );
           }
 
+          return;
         }
+
+
+        showScoreFeedback(
+          result.message ||
+          'Points berhasil disimpan.',
+          'success'
+        );
 
 
       } catch (error) {
 
         console.error(
-          'RECORD SCORE ERROR:',
+          'recordScore error:',
           error
         );
 
-
-        message.textContent =
-          '✕ Error: ' +
-          error.message;
-
-        message.className =
-          'error';
-
+        showScoreFeedback(
+          'Gagal menghubungi server.',
+          'error'
+        );
 
       } finally {
 
-        buttons.forEach(
-          function(button) {
-
-            button.disabled =
-              false;
-
-          }
-        );
-
+        scoreButtons.forEach(function(button) {
+          button.disabled = false;
+        });
       }
-
     }
 
 
-    // ==================================================
-    // QR SCANNER
-    // ==================================================
+    /**
+     * ========================================================
+     * SCORE FEEDBACK
+     * ========================================================
+     */
+
+    function showScoreFeedback(
+      message,
+      type
+    ) {
+
+      const element =
+        document.getElementById(
+          'scoreFeedback'
+        );
+
+      element.textContent =
+        message;
+
+      element.className =
+        'feedback visible ' +
+        type;
+    }
+
+
+    /**
+     * ========================================================
+     * SCAN ANOTHER PLAYER
+     * ========================================================
+     */
 
     async function scanAnotherPlayer() {
 
-      if (!sessionToken) {
+      /*
+       * Old operator session is intentionally kept.
+       *
+       * This means:
+       * operator authenticates once,
+       * then can scan another player
+       * without entering PIN again.
+       */
 
-        showError(
-          'Secure session tidak tersedia.'
-        );
+      cardData = null;
 
-        return;
+      hideScoreSection();
 
-      }
+      hidePinSection();
 
+      showScannerSection();
 
-      const scannerSection =
-        document.getElementById(
-          'scannerSection'
-        );
-
-
-      const scoreSection =
-        document.getElementById(
-          'scoreSection'
-        );
+      await startScanner();
+    }
 
 
-      scannerSection.style.display =
-        'block';
+    /**
+     * ========================================================
+     * SCANNER SECTION
+     * ========================================================
+     */
 
-
-      scoreSection.style.display =
-        'none';
-
+    function showScannerSection() {
 
       document.getElementById(
-        'scannerMessage'
-      ).textContent =
-        'Point the camera at the player\'s QR code.';
+        'scannerSection'
+      ).classList.add('visible');
+    }
 
 
-      if (html5QrCode) {
+    function hideScannerSection() {
 
-        try {
-
-          await html5QrCode.stop();
-
-        } catch (error) {
-
-          console.log(
-            'Previous scanner stop:',
-            error
-          );
-
-        }
+      document.getElementById(
+        'scannerSection'
+      ).classList.remove('visible');
+    }
 
 
-        try {
+    /**
+     * ========================================================
+     * START SCANNER
+     * ========================================================
+     */
 
-          html5QrCode.clear();
+    async function startScanner() {
 
-        } catch (error) {
-
-          console.log(
-            'Previous scanner clear:',
-            error
-          );
-
-        }
-
+      if (scannerRunning) {
+        return;
       }
 
+      const reader =
+        document.getElementById(
+          'reader'
+        );
 
-      html5QrCode =
+      reader.innerHTML = '';
+
+      scanner =
         new Html5Qrcode(
           'reader'
         );
 
-
-      const config = {
-
-        fps: 10,
-
-        qrbox: {
-
-          width: 250,
-          height: 250
-
-        }
-
-      };
-
-
       try {
 
-        await html5QrCode.start(
+        await scanner.start(
 
           {
             facingMode: {
@@ -1740,339 +1333,227 @@
             }
           },
 
-          config,
-
-          function(decodedText) {
-
-            handleScannedQR(
-              decodedText
-            );
-
+          {
+            fps: 10,
+            qrbox: {
+              width: 230,
+              height: 230
+            }
           },
 
+          handleScannedQR,
+
           function(errorMessage) {
-
-            // Normal QR detection misses.
-            // Do not display these.
-
+            // Ignore continuous scanner errors.
           }
 
         );
 
+        scannerRunning = true;
 
       } catch (error) {
 
         console.error(
-          'QR CAMERA DETECTION ERROR:',
+          'Scanner start error:',
           error
         );
 
-
-        document.getElementById(
-          'scannerMessage'
-        ).textContent =
-          'Unable to access camera: ' +
-          (
-            error.message ||
-            error
-          );
-
+        reader.innerHTML =
+          '<div class="empty-state visible">' +
+          'Camera tidak dapat digunakan. Pastikan izin kamera sudah diberikan.' +
+          '</div>';
       }
-
     }
 
 
-    // ==================================================
-    // HANDLE SCANNED QR
-    // ==================================================
+    /**
+     * ========================================================
+     * STOP SCANNER
+     * ========================================================
+     */
 
-    function handleScannedQR(
+    async function stopScanner() {
+
+      if (!scanner || !scannerRunning) {
+        return;
+      }
+
+      try {
+
+        await scanner.stop();
+
+      } catch (error) {
+
+        console.warn(
+          'Scanner stop warning:',
+          error
+        );
+      }
+
+      scannerRunning = false;
+
+      try {
+        await scanner.clear();
+      } catch (error) {
+        // Ignore.
+      }
+
+      scanner = null;
+    }
+
+
+    /**
+     * ========================================================
+     * HANDLE SCANNED QR
+     * ========================================================
+     */
+
+    async function handleScannedQR(
       decodedText
     ) {
 
-      stopScanner();
+      console.log(
+        'QR scanned:',
+        decodedText
+      );
+
+      const cardCode =
+        extractCardCode(
+          decodedText
+        );
+
+      if (!cardCode) {
+
+        showScoreFeedback(
+          'QR tidak berisi Card Code yang valid.',
+          'error'
+        );
+
+        return;
+      }
+
+      await stopScanner();
+
+      hideScannerSection();
+
+      await loadScannedPlayer(
+        cardCode
+      );
+    }
 
 
-      document.getElementById(
-        'scannerMessage'
-      ).textContent =
-        'Loading player...';
+    /**
+     * ========================================================
+     * EXTRACT CARD CODE
+     * ========================================================
+     *
+     * Expected:
+     * WEB_APP_URL/?card=PLAYER-001
+     *
+     * Also supports:
+     * ?card=PLAYER-001
+     */
+
+    function extractCardCode(
+      value
+    ) {
+
+      const text =
+        String(value || '').trim();
+
+      if (!text) {
+        return '';
+      }
 
 
       try {
 
         const url =
-          new URL(decodedText);
-
+          new URL(text);
 
         const card =
           url.searchParams.get(
             'card'
           );
 
+        if (card) {
 
-        if (!card) {
-
-          alert(
-            'QR code ini bukan QR Student Game Card.'
-          );
-
-
-          reopenScanner();
-
-          return;
-
+          return String(card)
+            .trim()
+            .toUpperCase();
         }
-
-
-        loadScannedPlayer(
-          card
-        );
-
 
       } catch (error) {
 
-        console.error(
-          'QR PARSE ERROR:',
-          error
-        );
+        /*
+         * QR might contain only:
+         * PLAYER-001
+         */
+        if (
+          /^PLAYER-\d+$/i.test(text)
+        ) {
 
-
-        alert(
-          'QR code tidak valid.'
-        );
-
-
-        reopenScanner();
-
+          return text
+            .trim()
+            .toUpperCase();
+        }
       }
 
+      return '';
     }
 
 
-    // ==================================================
-    // LOAD PLAYER FROM SCANNED QR
-    // ==================================================
+    /**
+     * ========================================================
+     * LOAD SCANNED PLAYER
+     * ========================================================
+     */
 
     async function loadScannedPlayer(
       cardCode
     ) {
 
-      if (!sessionToken) {
+      /*
+       * IMPORTANT:
+       * Identity is loaded FIRST.
+       *
+       * PIN is still required for scoring.
+       */
 
-        showError(
-          'Secure session tidak tersedia.'
-        );
-
-        return;
-
-      }
-
-
-      const success =
-        await loadPlayerCard(
-          cardCode
-        );
-
-
-      if (!success) {
-
-        reopenScanner();
-
-        return;
-
-      }
-
-
-      document.getElementById(
-        'recordMessage'
-      ).textContent =
-        '';
-
-
-      document.getElementById(
-        'scannerSection'
-      ).style.display =
-        'none';
-
-
-      updateStatus(
-        cardData
+      await loadPlayerCard(
+        cardCode
       );
-
     }
 
 
-    // ==================================================
-    // STOP SCANNER
-    // ==================================================
+    /**
+     * ========================================================
+     * INITIALIZE
+     * ========================================================
+     *
+     * New flow:
+     *
+     * URL
+     *   ↓
+     * card code
+     *   ↓
+     * load owner information
+     *   ↓
+     * show owner information
+     *   ↓
+     * operator PIN
+     *   ↓
+     * create authenticated session
+     *   ↓
+     * unlock scoring
+     */
 
-    async function stopScanner() {
-
-      if (!html5QrCode) {
-
-        return;
-
-      }
-
-
-      try {
-
-        await html5QrCode.stop();
-
-      } catch (error) {
-
-        console.log(
-          'Scanner stop error:',
-          error
-        );
-
-      }
-
-
-      try {
-
-        html5QrCode.clear();
-
-      } catch (error) {
-
-        console.log(
-          'Scanner clear error:',
-          error
-        );
-
-      }
-
-
-      html5QrCode =
-        null;
-
-    }
-
-
-    // ==================================================
-    // REOPEN SCANNER
-    // ==================================================
-
-    function reopenScanner() {
-
-      if (!sessionToken) {
-
-        showError(
-          'Secure session tidak tersedia.'
-        );
-
-        return;
-
-      }
-
-
-      document.getElementById(
-        'scannerSection'
-      ).style.display =
-        'block';
-
-
-      document.getElementById(
-        'scoreSection'
-      ).style.display =
-        'none';
-
-
-      scanAnotherPlayer();
-
-    }
-
-
-    // ==================================================
-    // CLOSE SCANNER
-    // ==================================================
-
-    async function closeScanner() {
-
-      await stopScanner();
-
-
-      document.getElementById(
-        'scannerSection'
-      ).style.display =
-        'none';
-
-
-      updateStatus(
-        cardData
-      );
-
-    }
-
-
-    // ==================================================
-    // ERROR DISPLAY
-    // ==================================================
-
-    function showError(
-      message
-    ) {
-
-      const status =
-        document.getElementById(
-          'status'
-        );
-
-
-      status.className =
-        'status inactive';
-
-
-      status.textContent =
-        '🔴 ' +
-        message;
-
-
-      document.getElementById(
-        'scoreSection'
-      ).style.display =
-        'none';
-
-    }
-
-
-    // ==================================================
-    // ENTER KEY FOR PIN
-    // ==================================================
-
-    document
-      .getElementById(
-        'operatorPin'
-      )
-      .addEventListener(
-        'keydown',
-        function(event) {
-
-          if (
-            event.key ===
-            'Enter'
-          ) {
-
-            unlockOperator();
-
-          }
-
-        }
-      );
-
-
-    // ==================================================
-    // START
-    // ==================================================
-
-    (function initialize() {
+    async function initialize() {
 
       const params =
         new URLSearchParams(
           window.location.search
         );
-
 
       const cardCode =
         params.get('card');
@@ -2080,26 +1561,63 @@
 
       if (!cardCode) {
 
-        showError(
-          'No card code was provided.'
+        setCardLoading(false);
+
+        showCardError(
+          'Card Code tidak ditemukan. Scan QR kartu terlebih dahulu.'
         );
 
         return;
-
       }
 
 
-      // Card is intentionally NOT loaded
-      // until the operator authenticates.
-      document.getElementById(
-        'status'
-      ).textContent =
-        '🔐 Operator authentication required.';
+      /*
+       * DO NOT create session here.
+       *
+       * Card identity must be loaded
+       * before PIN authentication.
+       */
 
-    })();
+      await loadPlayerCard(
+        cardCode
+      );
+    }
+
+
+    /**
+     * ========================================================
+     * ENTER KEY FOR PIN
+     * ========================================================
+     */
+
+    document
+      .getElementById('pinInput')
+      .addEventListener(
+        'keydown',
+        function(event) {
+
+          if (
+            event.key === 'Enter'
+          ) {
+
+            authenticateAndUnlock();
+          }
+        }
+      );
+
+
+    /**
+     * ========================================================
+     * PAGE LOAD
+     * ========================================================
+     */
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      initialize
+    );
 
   </script>
 
 </body>
-
 </html>
