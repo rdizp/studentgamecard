@@ -1,197 +1,140 @@
-// ==========================================================
-// GET API
-// ==========================================================
-
 function doGet(e) {
-
-  const action =
-    String(
-      e.parameter.action || ''
-    )
-      .trim()
-      .toLowerCase();
+  const action = String(
+    e.parameter.action || ''
+  ).trim().toLowerCase();
 
 
-  // ========================================================
-  // GET CARD
-  // ========================================================
+  // ==========================================
+  // PUBLIC CARD LOOKUP
+  // ==========================================
 
   if (action === 'card') {
 
-    const cardCode =
-      String(
-        e.parameter.card || ''
-      ).trim();
-
+    const cardCode = String(
+      e.parameter.card || ''
+    ).trim();
 
     if (!cardCode) {
-
       return jsonResponse({
-
         success: false,
-
-        message:
-          'Card Code tidak diberikan.'
-
+        message: 'Card Code tidak diberikan.'
       });
-
     }
 
-
-    const result =
-      getCardForScanner(
-        cardCode
-      );
-
-
     return jsonResponse(
-      result
+      getCardForScanner(cardCode)
     );
-
   }
 
 
-  // ========================================================
+  // ==========================================
   // ACTIVATION CONFIG
-  // ========================================================
+  // ==========================================
 
-  if (
-    action ===
-    'activation-config'
-  ) {
-
+  if (action === 'activation-config') {
     return jsonResponse(
       getActivationConfig()
     );
-
   }
 
 
-  // ========================================================
+  // ==========================================
   // DEACTIVATION CONFIG
-  // ========================================================
+  // ==========================================
 
-  if (
-    action ===
-    'deactivation-config'
-  ) {
-
+  if (action === 'deactivation-config') {
     return jsonResponse(
       getDeactivationConfig()
     );
-
   }
 
 
-  // ========================================================
-  // LOAD ACTIVE CARDS FOR DEACTIVATION
-  // ========================================================
+  // ==========================================
+  // LOAD CARDS FOR DEACTIVATION
+  // ==========================================
 
-  if (
-    action ===
-    'load-cards-for-deactivation'
-  ) {
-
+  if (action === 'load-cards-for-deactivation') {
     return jsonResponse(
       loadCardsForDeactivation()
     );
-
   }
 
 
-  // ========================================================
-  // EXISTING WEB APP / QR ROUTES
-  // ========================================================
+  // ==========================================
+  // OTHER QR REQUESTS
+  // ==========================================
 
   return handleQRRequest(e);
-
 }
 
-
-// ==========================================================
-// POST API
-// ==========================================================
 
 function doPost(e) {
 
   try {
 
-    if (
-      !e ||
-      !e.postData ||
-      !e.postData.contents
-    ) {
+    const data = JSON.parse(
+      e.postData.contents
+    );
 
-      return jsonResponse({
-
-        success: false,
-
-        message:
-          'POST data tidak diberikan.'
-
-      });
-
-    }
+    const action = String(
+      data.action || ''
+    ).trim().toLowerCase();
 
 
-    const data =
-      JSON.parse(
-        e.postData.contents
-      );
+    // ==========================================
+    // CREATE AUTHENTICATED OPERATOR SESSION
+    // ==========================================
+    //
+    // Frontend sends:
+    //
+    // {
+    //   action: "create-session",
+    //   operatorPin: "1234"
+    // }
+    //
+    // SessionService handles:
+    // - PIN authentication
+    // - session ID generation
+    // - session token generation
+    // - expiry
+    // - ACTIVE status
+    //
+    // ==========================================
 
-
-    const action =
-      String(
-        data.action || ''
-      )
-        .trim()
-        .toLowerCase();
-
-
-    // ======================================================
-    // CREATE SESSION
-    // ======================================================
-
-    if (
-      action ===
-      'create-session'
-    ) {
+    if (action === 'create-session') {
 
       return jsonResponse(
         createSession(
           data.operatorPin
         )
       );
-
     }
 
 
-    // ======================================================
+    // ==========================================
     // TERMINATE SESSION
-    // ======================================================
+    // ==========================================
 
-    if (
-      action ===
-      'terminate-session'
-    ) {
+    if (action === 'terminate-session') {
 
       return jsonResponse(
         terminateSession(
           data.sessionToken
         )
       );
-
     }
 
 
-    // ======================================================
+    // ==========================================
     // RECORD SCORE
-    // ======================================================
+    // ==========================================
+    //
+    // Backend MUST validate sessionToken
+    // inside recordScore().
+    //
+    // ==========================================
 
-    if (
-      action ===
-      'record-score'
-    ) {
+    if (action === 'record-score') {
 
       return jsonResponse(
         recordScore(
@@ -200,18 +143,14 @@ function doPost(e) {
           data.points
         )
       );
-
     }
 
 
-    // ======================================================
+    // ==========================================
     // ACTIVATE CARD
-    // ======================================================
+    // ==========================================
 
-    if (
-      action ===
-      'activate'
-    ) {
+    if (action === 'activate') {
 
       return jsonResponse(
         activateCard(
@@ -221,68 +160,53 @@ function doPost(e) {
           data.course
         )
       );
-
     }
 
 
-    // ======================================================
+    // ==========================================
     // DEACTIVATE CARD
-    // ======================================================
+    // ==========================================
 
-    if (
-      action ===
-      'deactivate'
-    ) {
+    if (action === 'deactivate') {
 
       return jsonResponse(
         deactivateCard(
           data.cardCode
         )
       );
-
     }
 
 
-    // ======================================================
+    // ==========================================
     // UNKNOWN ACTION
-    // ======================================================
+    // ==========================================
 
     return jsonResponse({
-
       success: false,
-
-      message:
-        'Unknown API action.'
-
+      message: 'Unknown API action.'
     });
 
 
   } catch (error) {
 
     console.error(
-      'API ERROR:',
+      'API error:',
       error
     );
 
-
     return jsonResponse({
-
       success: false,
-
       message:
         'API error: ' +
         error.message
-
     });
-
   }
-
 }
 
 
-// ==========================================================
-// JSON RESPONSE
-// ==========================================================
+ // ============================================================
+ // JSON RESPONSE
+ // ============================================================
 
 function jsonResponse(data) {
 
@@ -291,9 +215,6 @@ function jsonResponse(data) {
       JSON.stringify(data)
     )
     .setMimeType(
-      ContentService
-        .MimeType
-        .JSON
+      ContentService.MimeType.JSON
     );
-
 }
